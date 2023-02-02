@@ -47,4 +47,39 @@ class Cell {
     }
     return cells;
   }
+
+  //This function checks if a point p is located within a certain range, and is valid
+  //for a parent grid with set dimensions.
+  static bool isPointValid(Point p, int max_x, int max_y) {
+    if (((p.x < 0) || (p.y < 0)) || ((p.x > max_x) || (p.y > max_y))) {
+      return false;
+    }
+    return true;
+  }
+
+  //Sets the state of a given Cell
+  void setState(bool fresh_state) {
+    state = fresh_state;
+  }
+
+  //This caches the new state of the cell, generally to update to the next generation
+  void cacheState(bool fresh_state) {
+    newState = fresh_state;
+  }
+
+  //Updates the state of the cell to the next generation
+  void updateState() {
+    state = newState;
+  }
+
+  //Method for testing
+  String getCellData() {
+    String state = (this.state) ? "alive" : "dead";
+    String pos = "${this.position.x}, ${this.position.y}";
+    return "The cell at $pos is currently $state";
+  }
+
+  bool equals(Cell c) {
+    return this.getCellData() == (c.getCellData());
+  }
 }

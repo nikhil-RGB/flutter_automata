@@ -82,4 +82,6 @@ class Cell {
   bool equals(Cell c) {
     return this.getCellData() == (c.getCellData());
   }
+
+  bool stateUpdates(Cell c) {}
 }

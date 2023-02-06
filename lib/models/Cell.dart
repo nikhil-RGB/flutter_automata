@@ -1,5 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
-
+//An object of this class represent s a single Cell in a grid ecosystem for a singular Cellular automaton
 import 'dart:math';
 
 class Cell {
@@ -79,9 +79,70 @@ class Cell {
     return "The cell at $pos is currently $state";
   }
 
+//checks if this cell has the same data as the other cell passed.
   bool equals(Cell c) {
-    return this.getCellData() == (c.getCellData());
+    return getCellData() == (c.getCellData());
   }
 
-  bool stateUpdates(Cell c) {}
+//counts how many cells are alive in a particular list of cells.
+  int countAliveIn(List<Cell> list) {
+    int alive = 0;
+    for (Cell c in list) {
+      if (c.state) {
+        ++alive;
+      }
+    }
+    return alive;
+  }
+
+  //counts number of cells dead in a particular list
+  int countDeadIn(List<Cell> cells) {
+    int alive = countAliveIn(cells);
+    return (cells.length) - alive;
+  }
+
+//count cells which are currently in alive state for a grid ecosystem
+  static int countAlive(List<List<Cell>> grid) {
+    int alive = 0;
+    for (int i = 0; i < grid.length; ++i) {
+      for (int j = 0; j < grid[0].length; ++j) {
+        Cell c = grid[i][j];
+        if (c.state) {
+          ++alive;
+        }
+      }
+    }
+    return alive;
+  }
+
+  //count cells which are currently in dead state with reference to a particular grid system
+  static int countDead(List<List<Cell>> grid) {
+    int alive = countAlive(grid);
+    int total = grid.length * (grid[0].length);
+    int result = total - alive;
+    return result;
+  }
+
+  //Revamps the board, updating the states of all cells by substituting current state with cached
+  //state and setting cached states to defaults in preparation for the next generation.
+  stateUpdate() {
+    throw UnimplementedError(); //method unimplemeted, calculates new states, caches fresh states.
+    //proceeds to update states with cached values
+  }
+
+  //Calculates the state of a cell in the grid and updates cached state.
+  //returns new state
+  void calcStateUpdateFor(
+      List<List<Cell>> parent, int lower_bound, int upper_bound, int ress) {
+    bool new_state = ;
+
+    List<Cell> cells = this.getAdjacentCells(parent);
+    int aliveR = Cell.countAlive(parent);
+    int deadR = cells.length - aliveR;
+    if ((aliveR < lower_bound) || (aliveR > upper_bound)) {
+      new_state = false;
+    } else if (aliveR == ress) {
+      new_state = true;
+    }
+  }
 }

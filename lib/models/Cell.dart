@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unnecessary_this
 //An object of this class represent s a single Cell in a grid ecosystem for a singular Cellular automaton
 import 'dart:math';
 
@@ -11,7 +11,7 @@ class Cell {
   //standard cell constructor
   Cell({required this.position, this.state = false, this.newState = false});
   //This function returns all 8 adjacent cells to a single cell.
-  List<Cell> getAdjacentCells(List<dynamic> parent_grid) {
+  List<Cell> getAdjacentCells(List<List<Cell>> parent_grid) {
     List<Cell> cells = [];
     int xc = this.position.x.toInt();
     int yc = this.position.y.toInt();
@@ -35,17 +35,41 @@ class Cell {
       bottom_right,
       bottom_left
     ];
-    //List of cells which are expected to exist. It is possible that the cells DO NOT EXIST
-    int index = 0; //used to determine which Points are redundant
+    //List of cells which are expected to exist. It is possible that the cells DO NOT EXIST, in which case
+    //co-ordinates will be corrected, and added to the array even still.
+//used to determine which Points are redundant
     for (Point test_point in points) {
+      Cell c;
       try {
-        Cell c = parent_grid[test_point.x.toInt()][test_point.y.toInt()];
+        c = parent_grid[test_point.x.toInt()][test_point.y.toInt()];
         cells.add(c);
       } catch (exception) {
-        points.removeAt(index); //removes redundant index
+        Point corrected = correctCoords(test_point, parent_grid);
+        c = parent_grid[corrected.x.toInt()][corrected.y.toInt()];
       }
     }
     return cells;
+  }
+
+  //This function corrects the co-ordinates of a point outside the grid by switching it to a wrap-around
+  //position.
+  static Point correctCoords(Point p, List<List<Cell>> grid) {
+    int x = p.x.toInt();
+    int y = p.y.toInt();
+    int max_x = grid.length - 1;
+    int max_y = grid[0].length - 1;
+    if (x < 0) {
+      x = max_x;
+    } else if (x > max_x) {
+      x = 0;
+    }
+    if (y < 0) {
+      y = max_y;
+    } else if (y > max_y) {
+      y = 0;
+    }
+    Point return_val = Point(x, y);
+    return return_val;
   }
 
   //This function checks if a point p is located within a certain range, and is valid
@@ -125,7 +149,7 @@ class Cell {
 
   //Revamps the board, updating the states of all cells by substituting current state with cached
   //state and setting cached states to defaults in preparation for the next generation.
-  stateUpdate() {
+  bool stateUpdate() {
     throw UnimplementedError(); //method unimplemeted, calculates new states, caches fresh states.
     //proceeds to update states with cached values
   }
@@ -134,7 +158,7 @@ class Cell {
   //returns new state
   void calcStateUpdateFor(
       List<List<Cell>> parent, int lower_bound, int upper_bound, int ress) {
-    bool new_state = ;
+    bool new_state = this.state;
 
     List<Cell> cells = this.getAdjacentCells(parent);
     int aliveR = Cell.countAlive(parent);
@@ -144,5 +168,6 @@ class Cell {
     } else if (aliveR == ress) {
       new_state = true;
     }
+    this.newState = new_state;
   }
 }

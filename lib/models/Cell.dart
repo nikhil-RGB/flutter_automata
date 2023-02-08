@@ -2,6 +2,8 @@
 //An object of this class represent s a single Cell in a grid ecosystem for a singular Cellular automaton
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 class Cell {
   bool newState = false; //Changed state for a cell after
   //generation calculation, default value is false(dead)
@@ -42,11 +44,11 @@ class Cell {
       Cell c;
       try {
         c = parent_grid[test_point.x.toInt()][test_point.y.toInt()];
-        cells.add(c);
       } catch (exception) {
         Point corrected = correctCoords(test_point, parent_grid);
         c = parent_grid[corrected.x.toInt()][corrected.y.toInt()];
       }
+      cells.add(c);
     }
     return cells;
   }
@@ -147,11 +149,35 @@ class Cell {
     return result;
   }
 
+  static void refreshGrid(List<List<Cell>> grid) {
+    for (int i = 0; i < grid.length; ++i) {
+      for (int j = 0; j < grid[0].length; ++j) {
+        Cell c = grid[i][j];
+        c.updateState();
+      }
+    }
+  }
+
   //Revamps the board, updating the states of all cells by substituting current state with cached
   //state and setting cached states to defaults in preparation for the next generation.
-  bool stateUpdate() {
-    throw UnimplementedError(); //method unimplemeted, calculates new states, caches fresh states.
+  //Parameter definitions:
+  //parent_grid refers to the grid which hosts
+  static bool generationUpdate(List<List<Cell>> parent_grid, final int LB,
+      final int UB, int ressurection) {
+    bool changed = false;
+
+    for (int i = 0; i < parent_grid.length; ++i) {
+      for (int j = 0; j < parent_grid[0].length; ++j) {
+        Cell current = parent_grid[i][j]; //current cell being examined
+        current.calcStateUpdateFor(parent_grid, LB, UB, ressurection);
+        if (current.state != current.newState) {
+          changed = true;
+        }
+      }
+    }
+    refreshGrid(parent_grid);
     //proceeds to update states with cached values
+    return changed;
   }
 
   //Calculates the state of a cell in the grid and updates cached state.
@@ -169,5 +195,17 @@ class Cell {
       new_state = true;
     }
     this.newState = new_state;
+  }
+
+  //Generates a self-sustaining biome of cellular automata, all cells are dead by default, certain number of cells
+  //can be specified to be alive by default
+  List<List<Cell>> generateBiome({int? alive, required int x, required int y}) {
+    List<List<Cell>> grid = List.generate(
+        x,
+        (i) => List.generate(y, (j) {
+              return Cell(position: Point(i, j));
+            }));
+
+    return grid;
   }
 }

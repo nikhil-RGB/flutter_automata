@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_automata/util/custom_exceptions.dart';
 
 class Cell {
   bool newState = false; //Changed state for a cell after
@@ -198,14 +199,70 @@ class Cell {
   }
 
   //Generates a self-sustaining biome of cellular automata, all cells are dead by default, certain number of cells
-  //can be specified to be alive by default
+  //can be specified to be alive before automata is activated by user.
   List<List<Cell>> generateBiome({int? alive, required int x, required int y}) {
+    alive = alive ?? 0;
+    int total_size = x * y;
+    if (alive > total_size) {
+      throw MatrixOutOfBoundsException(
+          message:
+              "Requested units:${alive} \n Total biome size:${total_size} \n Request Denied.");
+    }
+    List<Cell> cell_list = List.empty(growable: true);
     List<List<Cell>> grid = List.generate(
         x,
         (i) => List.generate(y, (j) {
-              return Cell(position: Point(i, j));
+              Cell c = Cell(position: Point(i, j));
+              if (alive != 0) {
+                cell_list.add(c);
+              }
+              return c;
             }));
-
+    //code for randomly picking live cells
+    //optimized performance method possible.
+    int counter = 0;
+    while (counter < alive) {
+      Random r = Random();
+      for (int i = 0; i < cell_list.length && counter < alive; ++i) {
+        num probability = r.nextDouble();
+        if (probability > 0.45) {
+          Cell c = cell_list[i];
+          c.state = true;
+          cell_list.remove(c);
+          ++counter;
+        }
+      }
+    }
     return grid;
+  }
+
+// Generates a random set of points to be set to live position by creating a list of all indices and dynamicaally selecting and shortening List.
+  List<Point> generateRandom(List<List<Cell>> parent_grid, int alivec) {
+    int total = parent_grid.length * parent_grid[0].length;
+    if (alivec > total) {
+      throw MatrixOutOfBoundsException(
+        message:
+            "Requested live cells exceed total board  capacity\nRequest Denied!",
+      );
+    }
+    List<Point> available_points = List.empty();
+    int alive = 0;
+    for (int i = 0; i < parent_grid.length; i++) {
+      for (int j = 0; j < parent_grid[0].length; ++j) {
+        available_points.add(Point(i, j));
+        Cell cell = parent_grid[i][j];
+        if (cell.state) {
+          ++alive;
+        }
+      }
+    }
+
+    Random rng = Random();
+    for (; alive < alivec; ++alive) {
+      int index = rng.nextInt(available_points.length);
+      Point req = available_points[index];
+      parent_grid[req.x.toInt()][req.y.toInt()].state = true;
+      available_points.removeAt(index);
+    }
   }
 }

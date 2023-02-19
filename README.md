@@ -1,16 +1,20 @@
 # flutter_automata
 
-A new Flutter project.
+A flutter app to emulate the growth and control of a cell grid based on the concept of "Connway's Game of Life" to demonstrate "Cellular automata".
 
-## Getting Started
+# Project Purpose and Explanation
 
-This project is a starting point for a Flutter application.
+### Cellular automata:
 
-A few resources to get you started if this is your first Flutter project:
+Cellular automata (CA) is a mathematical model for simulating complex systems, typically represented as a grid of cells that can be in one of a finite number of states. The cells change state based on a set of rules that determine how their state is influenced by the state of surrounding cells. This creates patterns and structures that evolve over time, often giving rise to complex and seemingly intelligent behavior. CA is used in a variety of fields, including physics, biology, and computer science, to study phenomena ranging from pattern formation to self-organization and emergent behavior.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Connway's Game of Life: 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Conway's Game of Life is a cellular automaton that was first proposed by mathematician John Horton Conway in 1970. It is a simulation of simple rules that can generate complex and interesting patterns.
+
+The simulation takes place on a two-dimensional grid of cells, where each cell is either "alive" or "dead". At each step, the state of each cell is updated based on the state of its eight neighboring cells according to the following rules:
+
+If a cell is alive and has two or three live neighbors, it remains alive.
+If a cell is dead and has exactly three live neighbors, it comes to life.
+In all other cases, a cell dies or remains dead.
+These simple rules can generate patterns ranging from simple oscillators to complex shapes that evolve over time. The Game of Life is often used as an example of cellular automata and is widely studied by mathematicians, computer scientists, and other researchers interested in complex systems and emergent behavior.

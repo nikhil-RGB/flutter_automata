@@ -112,7 +112,7 @@ class Cell {
   }
 
 //counts how many cells are alive in a particular list of cells.
-  int countAliveIn(List<Cell> list) {
+  static int countAliveIn(List<Cell> list) {
     int alive = 0;
     for (Cell c in list) {
       if (c.state) {
@@ -123,7 +123,7 @@ class Cell {
   }
 
   //counts number of cells dead in a particular list
-  int countDeadIn(List<Cell> cells) {
+  static int countDeadIn(List<Cell> cells) {
     int alive = countAliveIn(cells);
     return (cells.length) - alive;
   }
@@ -237,7 +237,7 @@ class Cell {
   // }
 
 // Generates a random set of points to be set to live position by creating a list of all indices and dynamicaally selecting and shortening List.
-  void generateRandomLive(List<List<Cell>> parent_grid, int alivec) {
+  static void setRandomLive(List<List<Cell>> parent_grid, int alivec) {
     int total = parent_grid.length * parent_grid[0].length;
     if (alivec > total) {
       throw MatrixOutOfBoundsException(
@@ -263,6 +263,21 @@ class Cell {
       Point req = available_points[index];
       parent_grid[req.x.toInt()][req.y.toInt()].state = true;
       available_points.removeAt(index);
+    }
+  }
+
+  static List<List<Cell>> generateGrid(int rows, int columns) {
+    return List.generate(rows,
+        (x) => List.generate(columns, (y) => Cell(position: Point(x, y))));
+  }
+
+  //debugging methods
+  static void printGrid(List<List<Cell>> grid) {
+    for (int i = 0; i < grid.length; ++i) {
+      for (int j = 0; j < grid[0].length; ++j) {
+        print("${grid[i][j].state}  ");
+      }
+      print("\n");
     }
   }
 }

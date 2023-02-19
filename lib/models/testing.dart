@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_automata/models/Cell.dart';
 
 class testing {
@@ -11,9 +12,9 @@ class testing {
     for (int gen = 0; Cell.generationUpdate(grid, 2, 5, 3); ++gen) {
       Cell.printGrid(grid);
       await Future.delayed(const Duration(seconds: 1), () {
-        print("Generation Update");
+        debugPrint("Generation Update");
       });
     }
-    print("Automaton ended");
+    debugPrint("Automaton ended");
   }
 }

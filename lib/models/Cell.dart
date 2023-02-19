@@ -245,7 +245,7 @@ class Cell {
             "Requested live cells exceed total board  capacity\nRequest Denied!",
       );
     }
-    List<Point> available_points = List.empty();
+    List<Point> available_points = List.empty(growable: true);
     int alive = 0;
     for (int i = 0; i < parent_grid.length; i++) {
       for (int j = 0; j < parent_grid[0].length; ++j) {
@@ -275,9 +275,9 @@ class Cell {
   static void printGrid(List<List<Cell>> grid) {
     for (int i = 0; i < grid.length; ++i) {
       for (int j = 0; j < grid[0].length; ++j) {
-        print("${grid[i][j].state}  ");
+        debugPrint("${grid[i][j].state}  ");
       }
-      print("\n");
+      debugPrint("\n");
     }
   }
 }

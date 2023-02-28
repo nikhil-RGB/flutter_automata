@@ -21,26 +21,37 @@ class _CellGridState extends State<CellGrid> {
       decoration: BoxDecoration(
         color: Colors.black,
       ),
-      child: GridView.count(
-        crossAxisCount: widget.grid[0].length,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-        children:
-            List.generate(widget.grid.length * widget.grid[0].length, (index) {
-          //Come back here for returning CellButton object
-          return generateGridCell(singleDimensionAccess(index, widget.grid));
-        }),
+      padding: const EdgeInsets.only(
+        right: 12,
+        left: 12,
+      ),
+      child: Center(
+        child: GridView.count(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(0),
+          crossAxisCount: widget.grid[0].length,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          children: List.generate(widget.grid.length * widget.grid[0].length,
+              (index) {
+            //Come back here for returning CellButton object
+            return generateGridCell(singleDimensionAccess(index, widget.grid));
+          }),
+        ),
       ),
     );
   }
 
-  ElevatedButton generateGridCell(Cell ref) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: (ref.state) ? Colors.green : Colors.red,
+  Widget generateGridCell(Cell ref) {
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: (ref.state) ? Colors.green : Colors.red,
+        ),
+        child: const Text(""),
       ),
-      child: const Text(""),
     );
   }
 

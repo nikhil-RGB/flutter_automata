@@ -1,13 +1,13 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, must_be_immutable
 
 import 'package:flutter/material.dart';
 
 import 'models/Cell.dart';
 
 class CellGrid extends StatefulWidget {
-  final List<List<Cell>> grid; // Grid of Cells used for reference
-
-  const CellGrid({super.key, required this.grid});
+  List<List<Cell>> grid; // Grid of Cells used for reference
+  List<List<ElevatedButton>> buttons = []; //list of buttons
+  CellGrid({super.key, required this.grid});
 
   @override
   State<CellGrid> createState() => _CellGridState();
@@ -16,6 +16,13 @@ class CellGrid extends StatefulWidget {
 class _CellGridState extends State<CellGrid> {
   @override
   Widget build(BuildContext context) {
+    widget.buttons.clear();
+    for (int i = 0; i < widget.grid.length; ++i) {
+      widget.buttons.add(List.empty(growable: true));
+      for (int j = 0; j < widget.grid[0].length; ++j) {
+        widget.buttons[i].add(generateGridCell(widget.grid[i][j]));
+      }
+    }
     return Container(
       // ignore: prefer_const_constructors
       decoration: BoxDecoration(
@@ -32,26 +39,22 @@ class _CellGridState extends State<CellGrid> {
           crossAxisCount: widget.grid[0].length,
           crossAxisSpacing: 5,
           mainAxisSpacing: 5,
-          children: List.generate(widget.grid.length * widget.grid[0].length,
-              (index) {
-            //Come back here for returning CellButton object
-            return generateGridCell(singleDimensionAccess(index, widget.grid));
-          }),
+          children: compress(widget.buttons),
         ),
       ),
     );
   }
 
-  Widget generateGridCell(Cell ref) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: (ref.state) ? Colors.green : Colors.red,
-        ),
-        child: const Text(""),
+  ElevatedButton generateGridCell(Cell ref) {
+    return ElevatedButton(
+      onPressed: () {
+        //for testing purpose only
+        List<Cell> cells = ref.getAdjacentCells(widget.grid);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: (ref.state) ? Colors.green : Colors.red,
       ),
+      child: const Text(""),
     );
   }
 
@@ -64,5 +67,24 @@ class _CellGridState extends State<CellGrid> {
       }
     }
     return cells[sda];
+  }
+
+  //switches the grid being used for reference whilst also updating the UI with the same.
+  void switchContext(List<List<Cell>> obj) {
+    setState(() {
+      //I really like using the this keyword
+      // ignore: unnecessary_this
+      widget.grid = obj;
+    });
+  }
+
+  List<ElevatedButton> compress(List<List<ElevatedButton>> grid) {
+    List<ElevatedButton> compressed = List.empty(growable: true);
+    for (int i = 0; i < grid.length; ++i) {
+      for (int j = 0; j < grid[0].length; ++j) {
+        compressed.add(grid[i][j]);
+      }
+    }
+    return compressed;
   }
 }

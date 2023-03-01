@@ -47,10 +47,7 @@ class _CellGridState extends State<CellGrid> {
 
   ElevatedButton generateGridCell(Cell ref) {
     return ElevatedButton(
-      onPressed: () {
-        //for testing purpose only
-        List<Cell> cells = ref.getAdjacentCells(widget.grid);
-      },
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
         backgroundColor: (ref.state) ? Colors.green : Colors.red,
       ),

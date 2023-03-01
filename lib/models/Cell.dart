@@ -188,8 +188,7 @@ class Cell {
     bool new_state = this.state;
 
     List<Cell> cells = this.getAdjacentCells(parent);
-    int aliveR = Cell.countAlive(parent);
-    int deadR = cells.length - aliveR;
+    int aliveR = Cell.countAliveIn(cells);
     if ((aliveR < lower_bound) || (aliveR > upper_bound)) {
       new_state = false;
     } else if (aliveR == ress) {

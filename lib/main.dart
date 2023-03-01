@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 
 import 'models/Cell.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     List<List<Cell>> grid = Cell.generateGrid(9, 7);
     Cell.setRandomLive(grid, 21);
+    testing.runMethodBenchmark(grid, 0, 0);
     return MaterialApp(
       title: 'Cellular Automaton',
       theme: ThemeData(

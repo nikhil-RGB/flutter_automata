@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/util/custom_exceptions.dart';
+import 'package:logger/logger.dart';
 
 class Cell {
   bool newState = false; //Changed state for a cell after
@@ -265,18 +266,22 @@ class Cell {
     }
   }
 
-  static List<List<Cell>> generateGrid(int rows, int columns) {
+  static List<List<Cell>> generateGrid(Point point) {
+    int rows = point.x.toInt();
+    int columns = point.y.toInt();
     return List.generate(rows,
         (x) => List.generate(columns, (y) => Cell(position: Point(x, y))));
   }
 
   //debugging methods
   static void printGrid(List<List<Cell>> grid) {
+    String res = "";
     for (int i = 0; i < grid.length; ++i) {
       for (int j = 0; j < grid[0].length; ++j) {
-        debugPrint("${grid[i][j].state}  ");
+        res += ("${grid[i][j].state}  ");
       }
-      debugPrint("\n");
+      res += "\n";
     }
+    Logger().i(res);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/models/Cell.dart';
 import 'package:logger/logger.dart';
@@ -5,7 +7,8 @@ import 'package:logger/logger.dart';
 class testing {
   static Future<void> simulateRandomAutomaton(
       {required int rows, required int columns, required int alive}) async {
-    List<List<Cell>> grid = Cell.generateGrid(rows, columns); //control grid
+    List<List<Cell>> grid =
+        Cell.generateGrid(Point(rows, columns)); //control grid
     Cell.setRandomLive(grid,
         alive); //parent grid instantiated,20 random cells(out of 63) set to alive
     Cell.printGrid(grid);

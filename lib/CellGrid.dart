@@ -30,26 +30,34 @@ class _CellGridState extends State<CellGrid> {
         widget.buttons[i].add(generateGridCell(widget.grid[i][j]));
       }
     }
-    return Center(
-      child: Container(
-        // ignore: prefer_const_constructors
-        decoration: BoxDecoration(
-          color: Colors.black,
-        ),
-        padding: const EdgeInsets.only(
-          right: 12,
-          left: 12,
-          top: 4,
-          bottom: 4,
-        ),
-        child: Center(
-          child: GridView.count(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(0),
-            crossAxisCount: widget.grid[0].length,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            children: compress(widget.buttons),
+    return InteractiveViewer(
+      child: Center(
+        child: Container(
+          // ignore: prefer_const_constructors
+          decoration: BoxDecoration(
+            color: Colors.black,
+          ),
+          padding: const EdgeInsets.only(
+            right: 12,
+            left: 12,
+            top: 4,
+            bottom: 4,
+          ),
+          child: Center(
+            child: NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (OverscrollIndicatorNotification overscroll) {
+                overscroll.disallowIndicator();
+                return true;
+              },
+              child: GridView.count(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                crossAxisCount: widget.grid[0].length,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                children: compress(widget.buttons),
+              ),
+            ),
           ),
         ),
       ),

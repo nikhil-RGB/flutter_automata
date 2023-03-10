@@ -31,6 +31,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
       ),
       body: CellGrid(
         grid: widget.grid,
+        initPage: false,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

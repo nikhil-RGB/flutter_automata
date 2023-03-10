@@ -2,7 +2,6 @@
 //An object of this class represent s a single Cell in a grid ecosystem for a singular Cellular automaton
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_automata/util/custom_exceptions.dart';
 import 'package:logger/logger.dart';
 

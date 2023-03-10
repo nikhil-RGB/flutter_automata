@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
+import 'package:flutter_automata/pages/InitializationPage.dart';
 import 'models/Cell.dart';
 
 //constants for standard connways game of life, and for testing
 const int lower_bound = 2;
 const int upper_bound = 5;
 const int ressurection = 3;
-const Point dimensions = Point(40, 40);
-const int alives = 450;
+const Point dimensions = Point(22, 22);
+const int alives = 150;
 
 void main() {
   runApp(const MyApp());
@@ -31,11 +32,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      home: AutomatonPage(
-        grid: grid,
+      // home: AutomatonPage(
+      //   grid: grid,
+      //   lb: lower_bound,
+      //   ub: upper_bound,
+      //   ress: ressurection,
+      // ),
+      home: InitializationPage(
         lb: lower_bound,
         ub: upper_bound,
         ress: ressurection,
+        dimensions.x.toInt(),
+        dimensions.y.toInt(),
       ),
     );
   }

@@ -283,4 +283,22 @@ class Cell {
     }
     Logger().i(res);
   }
+
+  //clones a cell grid
+  static List<List<Cell>> cloneGrid(List<List<Cell>> target) {
+    List<List<Cell>> product = [];
+    for (int i = 0; i < target.length; ++i) {
+      product.add([]);
+      for (int j = 0; j < target[i].length; ++j) {
+        Cell element = target[i][j];
+        product[i].add(element.clone());
+      }
+    }
+    return product;
+  }
+
+  Cell clone() {
+    return Cell(
+        position: this.position, state: this.state, newState: this.newState);
+  }
 }

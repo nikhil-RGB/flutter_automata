@@ -33,11 +33,12 @@ class _InitializationPageState extends State<InitializationPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          AutomatonPage.running = true;
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: ((context) => AutomatonPage(
-                      grid: widget.grid,
+                      grid: Cell.cloneGrid(widget.grid),
                       ub: widget.ub,
                       lb: widget.lb,
                       ress: widget.ress))));

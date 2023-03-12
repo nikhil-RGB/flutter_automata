@@ -40,6 +40,13 @@ class _AutomatonPageState extends State<AutomatonPage> {
               AutomatonPage.running = Cell.generationUpdate(
                   widget.grid, widget.lb, widget.ub, widget.ress);
             });
+            if (!AutomatonPage.running) {
+              await openInfoDialog(
+                  context: context,
+                  details:
+                      "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
+                  title: "Automaton Stabilized");
+            }
           } else {
             await openInfoDialog(
                 context: context,

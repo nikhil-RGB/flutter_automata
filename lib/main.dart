@@ -10,7 +10,7 @@ import 'models/Cell.dart';
 
 //constants for standard connways game of life, and for testing
 const int lower_bound = 2;
-const int upper_bound = 5;
+const int upper_bound = 3;
 const int ressurection = 3;
 const Point dimensions = Point(22, 22);
 const int alives = 150;

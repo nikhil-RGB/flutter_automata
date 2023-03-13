@@ -25,38 +25,40 @@ class AutomatonPage extends StatefulWidget {
 class _AutomatonPageState extends State<AutomatonPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cellular automata"),
-      ),
-      body: CellGrid(
-        grid: widget.grid,
-        initPage: false,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (AutomatonPage.running) {
-            setState(() {
-              AutomatonPage.running = Cell.generationUpdate(
-                  widget.grid, widget.lb, widget.ub, widget.ress);
-            });
-            if (!AutomatonPage.running) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Cellular automata"),
+        ),
+        body: CellGrid(
+          grid: widget.grid,
+          initPage: false,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            if (AutomatonPage.running) {
+              setState(() {
+                AutomatonPage.running = Cell.generationUpdate(
+                    widget.grid, widget.lb, widget.ub, widget.ress);
+              });
+              if (!AutomatonPage.running) {
+                await openInfoDialog(
+                    context: context,
+                    details:
+                        "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
+                    title: "Automaton Stabilized");
+              }
+            } else {
               await openInfoDialog(
                   context: context,
                   details:
                       "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
-                  title: "Automaton Stabilized");
+                  title: "Grid Biome Disabled");
             }
-          } else {
-            await openInfoDialog(
-                context: context,
-                details:
-                    "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
-                title: "Grid Biome Disabled");
-          }
-        },
-        backgroundColor: Colors.cyan,
-        child: const Icon(Icons.play_arrow_rounded),
+          },
+          backgroundColor: Colors.cyan,
+          child: const Icon(Icons.play_arrow_rounded),
+        ),
       ),
     );
   }

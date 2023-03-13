@@ -28,6 +28,7 @@ class _InitializationPageState extends State<InitializationPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         // appBar: AppBar(
         //   title: const Text("Initialize your automaton"),
         //   backgroundColor: Colors.black,
@@ -40,27 +41,28 @@ class _InitializationPageState extends State<InitializationPage> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             generateAppBar(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
             CellGrid(
               grid: widget.grid,
               initPage: true,
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            AutomatonPage.running = true;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => AutomatonPage(
-                        grid: Cell.cloneGrid(widget.grid),
-                        ub: widget.ub,
-                        lb: widget.lb,
-                        ress: widget.ress))));
-          },
-          backgroundColor: Colors.cyan,
-          child: const Icon(Icons.fast_forward_outlined),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     AutomatonPage.running = true;
+        //     Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: ((context) => AutomatonPage(
+        //                 grid: Cell.cloneGrid(widget.grid),
+        //                 ub: widget.ub,
+        //                 lb: widget.lb,
+        //                 ress: widget.ress))));
+        //   },
+        //   backgroundColor: Colors.cyan,
+        //   child: const Icon(Icons.fast_forward_outlined),
+        // ),
       ),
     );
   }
@@ -88,7 +90,10 @@ class _InitializationPageState extends State<InitializationPage> {
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
             ],
-        child: const Icon(Icons.menu_rounded));
+        child: const Icon(
+          Icons.menu_rounded,
+          color: Colors.cyan,
+        ));
   }
 
   Widget generateAppBar() {

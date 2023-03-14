@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/Cell.dart';
@@ -24,10 +25,13 @@ class InitializationPage extends StatefulWidget {
 }
 
 class _InitializationPageState extends State<InitializationPage> {
+  BuildContext? ctxt;
   @override
   Widget build(BuildContext context) {
+    ctxt = context;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         // appBar: AppBar(
         //   title: const Text("Initialize your automaton"),
@@ -35,7 +39,7 @@ class _InitializationPageState extends State<InitializationPage> {
         //   foregroundColor: Colors.cyan,
         //   actions: [
         //     generateSpecialMenu(),
-        //   ],
+        // ],
         // ),
         body: Column(
           children: [
@@ -89,7 +93,54 @@ class _InitializationPageState extends State<InitializationPage> {
                     "Change Color scheme",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
+              PopupMenuItem(
+                  value: 3,
+                  child: Text(
+                    "Randomize Initial configuration.",
+                    style: GoogleFonts.sourceCodePro(color: Colors.white),
+                  )),
+              PopupMenuItem(
+                  value: 4,
+                  child: Text(
+                    "Reset Board",
+                    style: GoogleFonts.sourceCodePro(color: Colors.white),
+                  )),
             ],
+        onSelected: (value) async {
+          switch (value) {
+            case 0:
+              {}
+              break;
+            case 1:
+              {}
+              break;
+            case 2:
+              {}
+              break;
+            case 3:
+              {
+                int alivec = await DialogManager.openNumericalDialog(
+                  max: widget.grid.length * widget.grid[0].length,
+                  context: ctxt!,
+                  title: "Input minimum number of cells required to be alive",
+                );
+                if (alivec == -1) {
+                  return;
+                }
+                setState(() async {
+                  Cell.setRandomLive(widget.grid, alivec);
+                });
+              }
+              break;
+            case 4:
+              {
+                setState(() {
+                  Cell.clearGrid(widget.grid);
+                });
+              }
+              break;
+          }
+        },
         child: const Icon(
           Icons.menu_rounded,
           color: Colors.cyan,

@@ -27,6 +27,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
           title: const Text("Cellular automata"),
         ),

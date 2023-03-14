@@ -127,7 +127,7 @@ class _InitializationPageState extends State<InitializationPage> {
                 if (alivec == -1) {
                   return;
                 }
-                setState(() async {
+                setState(() {
                   Cell.setRandomLive(widget.grid, alivec);
                 });
               }

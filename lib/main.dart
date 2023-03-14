@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 import 'package:flutter_automata/pages/InitializationPage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'models/Cell.dart';
 
 //constants for standard connways game of life, and for testing
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Cellular Automaton',
       theme: ThemeData(
         primarySwatch: Colors.cyan,
+        textTheme: GoogleFonts.sourceCodeProTextTheme(),
       ),
       // home: AutomatonPage(
       //   grid: grid,

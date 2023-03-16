@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/pages/InitializationPage.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 
 class WelcomePage extends StatelessWidget {
+  static const int minRows = 2;
+  static const int maxRows = 70;
+  static const int minCols = 2;
+  static const int maxCols = 70;
   String s = "";
   int x;
   int y;
@@ -36,11 +41,23 @@ class WelcomePage extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.15,
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              List input = await DialogManager.openInitializeGridDialog(
+                  context: context,
+                  maxRows: maxRows,
+                  minRows: minRows,
+                  maxColumns: maxCols,
+                  minColumns: minCols);
+              if (input.isEmpty) {
+                return;
+              }
+
+              // ignore: use_build_context_synchronously
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: ((context) => InitializationPage(x, y,
+                      builder: ((context) => InitializationPage(
+                          input[0], input[1],
                           ub: ub, lb: lb, ress: ress))));
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),

@@ -126,6 +126,7 @@ class DialogManager {
             content: Form(
               key: formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
                     style: const TextStyle(color: Colors.cyan),

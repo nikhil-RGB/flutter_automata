@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 import 'package:flutter_automata/pages/InitializationPage.dart';
+import 'package:flutter_automata/pages/WelcomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'models/Cell.dart';
 
@@ -40,12 +41,18 @@ class MyApp extends StatelessWidget {
       //   ub: upper_bound,
       //   ress: ressurection,
       // ),
-      home: InitializationPage(
+      // home: InitializationPage(
+      //   lb: lower_bound,
+      //   ub: upper_bound,
+      //   ress: ressurection,
+      //   dimensions.x.toInt(),
+      //   dimensions.y.toInt(),
+      home: WelcomePage(
         lb: lower_bound,
         ub: upper_bound,
         ress: ressurection,
-        dimensions.x.toInt(),
-        dimensions.y.toInt(),
+        x: dimensions.x.toInt(),
+        y: dimensions.y.toInt(),
       ),
     );
   }

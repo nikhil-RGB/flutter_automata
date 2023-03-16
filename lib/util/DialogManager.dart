@@ -307,4 +307,205 @@ class DialogManager {
           );
         },
       );
+
+  static Future openRuleChangeDialog({required BuildContext context}) {
+    TextEditingController lower_bound = TextEditingController();
+    TextEditingController upper_bound = TextEditingController();
+    TextEditingController ressurection = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            title: Text(
+              "Change Rules",
+              style: GoogleFonts.sourceCodePro(
+                color: Colors.cyan,
+              ),
+            ),
+            backgroundColor: const Color(0XFF004246),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: lower_bound,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: "Lower Bound",
+                      alignLabelWithHint: true,
+                      labelStyle: GoogleFonts.sourceCodePro(
+                          fontSize: 15,
+                          color: Colors.cyan,
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w400),
+                      floatingLabelStyle:
+                          GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      hintStyle: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan, fontSize: 14),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 3, color: Colors.cyan),
+                          borderRadius: BorderRadius.circular(50.0)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 3, color: Colors.teal), //<-- SEE HERE
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                    validator: _validateRule,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  TextFormField(
+                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: upper_bound,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: "Upper Bound",
+                      alignLabelWithHint: true,
+                      labelStyle: GoogleFonts.sourceCodePro(
+                          fontSize: 15,
+                          color: Colors.cyan,
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w400),
+                      floatingLabelStyle:
+                          GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      hintStyle: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan, fontSize: 14),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 3, color: Colors.cyan),
+                          borderRadius: BorderRadius.circular(50.0)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 3, color: Colors.teal), //<-- SEE HERE
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                    validator: _validateRule,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  TextFormField(
+                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: ressurection,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: "Ressurection Bound",
+                      alignLabelWithHint: true,
+                      labelStyle: GoogleFonts.sourceCodePro(
+                          fontSize: 15,
+                          color: Colors.cyan,
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w400),
+                      floatingLabelStyle:
+                          GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      hintStyle: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan, fontSize: 14),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 3, color: Colors.cyan),
+                          borderRadius: BorderRadius.circular(50.0)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 3, color: Colors.teal), //<-- SEE HERE
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                    validator: _validateRule,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  //cancel
+                  Navigator.pop(context, List.empty());
+                },
+                child: Text("Cancel", style: GoogleFonts.sourceCodePro()),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  //confirm
+                  if (formKey.currentState!.validate()) {
+                    //passing data back, it is valid
+                    Navigator.pop(context, [
+                      int.parse(lower_bound.text),
+                      int.parse(upper_bound.text),
+                      int.parse(ressurection.text)
+                    ]);
+                  }
+                },
+                child: Text("Confirm", style: GoogleFonts.sourceCodePro()),
+              ),
+            ],
+          );
+        });
+  }
+
+  static String? _validateRule(value) {
+    try {
+      int lb = int.parse(value!);
+      if (lb > 8 || lb < 1) {
+        return "1-8 values only!";
+      }
+    } catch (_) {
+      return "Invalid input!";
+    }
+    return null;
+  }
 }

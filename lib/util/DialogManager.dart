@@ -308,10 +308,23 @@ class DialogManager {
         },
       );
 
-  static Future openRuleChangeDialog({required BuildContext context}) {
-    TextEditingController lower_bound = TextEditingController();
-    TextEditingController upper_bound = TextEditingController();
-    TextEditingController ressurection = TextEditingController();
+  static Future openRuleChangeDialog(
+      {required BuildContext context,
+      required int prev_lb,
+      required int prev_ub,
+      required int prev_ress}) {
+    TextEditingController lower_bound =
+        TextEditingController(text: prev_lb.toString());
+    TextEditingController upper_bound =
+        TextEditingController(text: prev_ub.toString());
+    TextEditingController ressurection =
+        TextEditingController(text: prev_ress.toString());
+    const String lbText =
+        "Number of live adjacent cells below which current cell dies of loneliness";
+    const String ubText =
+        "Number of live adjacent cells above which current cell dies of overcrowding";
+    const String ressText =
+        "Exact number of live adjacent cells required to ressurect current cell";
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return showDialog(
@@ -321,153 +334,176 @@ class DialogManager {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(6.0))),
             title: Text(
-              "Change Rules",
+              "Change Rules/Bounds",
               style: GoogleFonts.sourceCodePro(
                 color: Colors.cyan,
               ),
             ),
             backgroundColor: const Color(0XFF004246),
-            content: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: lower_bound,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: "Lower Bound",
-                      alignLabelWithHint: true,
-                      labelStyle: GoogleFonts.sourceCodePro(
-                          fontSize: 15,
-                          color: Colors.cyan,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w400),
-                      floatingLabelStyle:
-                          GoogleFonts.sourceCodePro(color: Colors.cyan),
-                      hintStyle: GoogleFonts.sourceCodePro(
-                          color: Colors.cyan, fontSize: 14),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(width: 3, color: Colors.cyan),
-                          borderRadius: BorderRadius.circular(50.0)),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 3, color: Colors.teal), //<-- SEE HERE
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
+            content: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      lbText,
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
                     ),
-                    validator: _validateRule,
-                    keyboardType: TextInputType.number,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  TextFormField(
-                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: upper_bound,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: "Upper Bound",
-                      alignLabelWithHint: true,
-                      labelStyle: GoogleFonts.sourceCodePro(
-                          fontSize: 15,
-                          color: Colors.cyan,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w400),
-                      floatingLabelStyle:
-                          GoogleFonts.sourceCodePro(color: Colors.cyan),
-                      hintStyle: GoogleFonts.sourceCodePro(
-                          color: Colors.cyan, fontSize: 14),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(width: 3, color: Colors.cyan),
-                          borderRadius: BorderRadius.circular(50.0)),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 3, color: Colors.teal), //<-- SEE HERE
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
                     ),
-                    validator: _validateRule,
-                    keyboardType: TextInputType.number,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  TextFormField(
-                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: ressurection,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: "Ressurection Bound",
-                      alignLabelWithHint: true,
-                      labelStyle: GoogleFonts.sourceCodePro(
-                          fontSize: 15,
-                          color: Colors.cyan,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w400),
-                      floatingLabelStyle:
-                          GoogleFonts.sourceCodePro(color: Colors.cyan),
-                      hintStyle: GoogleFonts.sourceCodePro(
-                          color: Colors.cyan, fontSize: 14),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(width: 3, color: Colors.cyan),
-                          borderRadius: BorderRadius.circular(50.0)),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 3, color: Colors.teal), //<-- SEE HERE
-                        borderRadius: BorderRadius.circular(50.0),
+                    TextFormField(
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: lower_bound,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: "Lower Bound",
+                        alignLabelWithHint: true,
+                        labelStyle: GoogleFonts.sourceCodePro(
+                            fontSize: 15,
+                            color: Colors.cyan,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400),
+                        floatingLabelStyle:
+                            GoogleFonts.sourceCodePro(color: Colors.cyan),
+                        hintStyle: GoogleFonts.sourceCodePro(
+                            color: Colors.cyan, fontSize: 14),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 3, color: Colors.cyan),
+                            borderRadius: BorderRadius.circular(50.0)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.teal), //<-- SEE HERE
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
                       ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.redAccent),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
+                      validator: _validateRule,
+                      keyboardType: TextInputType.number,
                     ),
-                    validator: _validateRule,
-                    keyboardType: TextInputType.number,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                ],
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
+                    ),
+                    Text(
+                      ubText,
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
+                    ),
+                    TextFormField(
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: upper_bound,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: "Upper Bound",
+                        alignLabelWithHint: true,
+                        labelStyle: GoogleFonts.sourceCodePro(
+                            fontSize: 15,
+                            color: Colors.cyan,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400),
+                        floatingLabelStyle:
+                            GoogleFonts.sourceCodePro(color: Colors.cyan),
+                        hintStyle: GoogleFonts.sourceCodePro(
+                            color: Colors.cyan, fontSize: 14),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 3, color: Colors.cyan),
+                            borderRadius: BorderRadius.circular(50.0)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.teal), //<-- SEE HERE
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                      validator: _validateRule,
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
+                    ),
+                    Text(
+                      ressText,
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
+                    ),
+                    TextFormField(
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: ressurection,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: "Ressurection Bound",
+                        alignLabelWithHint: true,
+                        labelStyle: GoogleFonts.sourceCodePro(
+                            fontSize: 15,
+                            color: Colors.cyan,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400),
+                        floatingLabelStyle:
+                            GoogleFonts.sourceCodePro(color: Colors.cyan),
+                        hintStyle: GoogleFonts.sourceCodePro(
+                            color: Colors.cyan, fontSize: 14),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 3, color: Colors.cyan),
+                            borderRadius: BorderRadius.circular(50.0)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.teal), //<-- SEE HERE
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                      validator: _validateRule,
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.023,
+                    ),
+                  ],
+                ),
               ),
             ),
             actions: [

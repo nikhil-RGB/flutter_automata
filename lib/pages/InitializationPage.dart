@@ -112,8 +112,11 @@ class _InitializationPageState extends State<InitializationPage> {
               {
                 // DialogManager.openInfoDialog(
                 //     details: "Not implemented yet!", context: context);
-                List rules =
-                    await DialogManager.openRuleChangeDialog(context: context);
+                List rules = await DialogManager.openRuleChangeDialog(
+                    context: context,
+                    prev_lb: widget.lb,
+                    prev_ub: widget.ub,
+                    prev_ress: widget.ress);
                 if (rules.isEmpty) {
                   return;
                 }

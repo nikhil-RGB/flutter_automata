@@ -109,13 +109,22 @@ class _InitializationPageState extends State<InitializationPage> {
         onSelected: (value) async {
           switch (value) {
             case 0:
-              {}
+              {
+                DialogManager.openInfoDialog(
+                    details: "Not implemented yet!", context: context);
+              }
               break;
             case 1:
-              {}
+              {
+                DialogManager.openInfoDialog(
+                    details: "Not implemented yet!", context: context);
+              }
               break;
             case 2:
-              {}
+              {
+                DialogManager.openInfoDialog(
+                    details: "Not implemented yet!", context: context);
+              }
               break;
             case 3:
               {

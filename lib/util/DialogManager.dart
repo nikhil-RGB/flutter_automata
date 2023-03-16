@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ class DialogManager {
     required int max,
   }) {
     TextEditingController num_dialog = TextEditingController();
+    // ignore: no_leading_underscores_for_local_identifiers
     final GlobalKey<FormState> _formKeynum = GlobalKey<FormState>();
     return showDialog(
         context: context,
@@ -18,7 +21,7 @@ class DialogManager {
                 borderRadius: BorderRadius.all(Radius.circular(6.0))),
             title: Text(
               title,
-              style: GoogleFonts.dmSans(
+              style: GoogleFonts.sourceCodePro(
                 color: Colors.cyan,
               ),
             ),
@@ -26,7 +29,7 @@ class DialogManager {
             content: Form(
               key: _formKeynum,
               child: TextFormField(
-                style: const TextStyle(color: Colors.cyan),
+                style: GoogleFonts.sourceCodePro(color: Colors.cyan),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: num_dialog,
                 inputFormatters: <TextInputFormatter>[
@@ -35,13 +38,15 @@ class DialogManager {
                 decoration: InputDecoration(
                   labelText: "Number of live cells",
                   alignLabelWithHint: true,
-                  labelStyle: GoogleFonts.roboto(
+                  labelStyle: GoogleFonts.sourceCodePro(
                       fontSize: 15,
                       color: Colors.cyan,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.w400),
-                  floatingLabelStyle: const TextStyle(color: Colors.cyan),
-                  hintStyle: const TextStyle(color: Colors.cyan, fontSize: 14),
+                  floatingLabelStyle:
+                      GoogleFonts.sourceCodePro(color: Colors.cyan),
+                  hintStyle: GoogleFonts.sourceCodePro(
+                      color: Colors.cyan, fontSize: 14),
                   focusedBorder: OutlineInputBorder(
                       borderSide:
                           const BorderSide(width: 3, color: Colors.cyan),
@@ -81,7 +86,7 @@ class DialogManager {
                   //cancel
                   Navigator.pop(context, -1);
                 },
-                child: Text("Cancel", style: GoogleFonts.dmSans()),
+                child: Text("Cancel", style: GoogleFonts.sourceCodePro()),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -91,7 +96,7 @@ class DialogManager {
                     Navigator.pop(context, int.parse(num_dialog.text));
                   }
                 },
-                child: Text("Confirm", style: GoogleFonts.dmSans()),
+                child: Text("Confirm", style: GoogleFonts.sourceCodePro()),
               ),
             ],
           );
@@ -118,7 +123,7 @@ class DialogManager {
                 borderRadius: BorderRadius.all(Radius.circular(6.0))),
             title: Text(
               title,
-              style: GoogleFonts.dmSans(
+              style: GoogleFonts.sourceCodePro(
                 color: Colors.cyan,
               ),
             ),
@@ -129,7 +134,7 @@ class DialogManager {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    style: const TextStyle(color: Colors.cyan),
+                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: rows,
                     inputFormatters: <TextInputFormatter>[
@@ -138,14 +143,15 @@ class DialogManager {
                     decoration: InputDecoration(
                       labelText: "Number of Rows",
                       alignLabelWithHint: true,
-                      labelStyle: GoogleFonts.roboto(
+                      labelStyle: GoogleFonts.sourceCodePro(
                           fontSize: 15,
                           color: Colors.cyan,
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w400),
-                      floatingLabelStyle: const TextStyle(color: Colors.cyan),
-                      hintStyle:
-                          const TextStyle(color: Colors.cyan, fontSize: 14),
+                      floatingLabelStyle:
+                          GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      hintStyle: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan, fontSize: 14),
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               const BorderSide(width: 3, color: Colors.cyan),
@@ -186,7 +192,7 @@ class DialogManager {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   TextFormField(
-                    style: const TextStyle(color: Colors.cyan),
+                    style: GoogleFonts.sourceCodePro(color: Colors.cyan),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: columns,
                     inputFormatters: <TextInputFormatter>[
@@ -195,14 +201,15 @@ class DialogManager {
                     decoration: InputDecoration(
                       labelText: "Number of Columns",
                       alignLabelWithHint: true,
-                      labelStyle: GoogleFonts.roboto(
+                      labelStyle: GoogleFonts.sourceCodePro(
                           fontSize: 15,
                           color: Colors.cyan,
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w400),
-                      floatingLabelStyle: const TextStyle(color: Colors.cyan),
-                      hintStyle:
-                          const TextStyle(color: Colors.cyan, fontSize: 14),
+                      floatingLabelStyle:
+                          GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      hintStyle: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan, fontSize: 14),
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               const BorderSide(width: 3, color: Colors.cyan),
@@ -248,7 +255,7 @@ class DialogManager {
                   //cancel
                   Navigator.pop(context, List.empty());
                 },
-                child: Text("Cancel", style: GoogleFonts.dmSans()),
+                child: Text("Cancel", style: GoogleFonts.sourceCodePro()),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -259,10 +266,45 @@ class DialogManager {
                         [int.parse(rows.text), int.parse(columns.text)]);
                   }
                 },
-                child: Text("Confirm", style: GoogleFonts.dmSans()),
+                child: Text("Confirm", style: GoogleFonts.sourceCodePro()),
               ),
             ],
           );
         });
   }
+
+  static Future openInfoDialog(
+          {String info_title = "Information",
+          required String details,
+          required BuildContext context}) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            title: Text(
+              info_title,
+              style: const TextStyle(
+                color: Colors.cyan,
+              ),
+            ),
+            content: Text(
+              details,
+              style: const TextStyle(
+                color: Colors.cyan,
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Ok"),
+              ),
+            ],
+            backgroundColor: const Color(0XFF004246),
+          );
+        },
+      );
 }

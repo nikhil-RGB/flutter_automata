@@ -392,7 +392,8 @@ class DialogManager {
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                      validator: _validateRule,
+                      validator: (value) => _validateRuleN(value,
+                          lowerb: lower_bound.text, upperb: upper_bound.text),
                       keyboardType: TextInputType.number,
                     ),
                     SizedBox(
@@ -444,7 +445,8 @@ class DialogManager {
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                      validator: _validateRule,
+                      validator: (value) => _validateRuleN(value,
+                          lowerb: lower_bound.text, upperb: upper_bound.text),
                       keyboardType: TextInputType.number,
                     ),
                     SizedBox(
@@ -496,7 +498,8 @@ class DialogManager {
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                      validator: _validateRule,
+                      validator: (value) => _validateRuleR(value,
+                          lowerB: lower_bound.text, upperB: upper_bound.text),
                       keyboardType: TextInputType.number,
                     ),
                     SizedBox(
@@ -533,11 +536,34 @@ class DialogManager {
         });
   }
 
-  static String? _validateRule(value) {
+  static String? _validateRuleN(value,
+      {required String lowerb, required String upperb}) {
     try {
-      int lb = int.parse(value!);
-      if (lb > 8 || lb < 1) {
+      int rule = int.parse(value!);
+      if (rule > 8 || rule < 1) {
         return "1-8 values only!";
+      }
+      if (int.parse(lowerb) > int.parse(upperb)) {
+        return "Lower Bound>Upper Bound!";
+      }
+    } catch (_) {
+      return "Invalid input!";
+    }
+    return null;
+  }
+
+  static String? _validateRuleR(value,
+      {required String lowerB, required String upperB}) {
+    try {
+      int rule = int.parse(value!);
+      if (rule > 8 || rule < 1) {
+        return "1-8 values only!";
+      }
+      if (rule > int.parse(upperB)) {
+        return "Ressurection > Upper Bound!";
+      }
+      if (rule < int.parse(lowerB)) {
+        return "Ressurection<Lower Bound!";
       }
     } catch (_) {
       return "Invalid input!";

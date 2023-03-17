@@ -47,7 +47,8 @@ class _CellGridState extends State<CellGrid> {
             borderRadius: BorderRadius.circular(7),
             color: const Color(0x1AD9D9D9),
           ),
-          margin: const EdgeInsets.all(7.0),
+          margin:
+              const EdgeInsets.only(top: 5, bottom: 10, left: 10, right: 10),
           padding: const EdgeInsets.only(
             right: 12,
             left: 12,

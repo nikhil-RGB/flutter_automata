@@ -45,11 +45,14 @@ class _InitializationPageState extends State<InitializationPage> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             generateAppBar(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            CellGrid(
-              grid: widget.grid,
-              initPage: true,
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Expanded(
+              child: CellGrid(
+                grid: widget.grid,
+                initPage: true,
+              ),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
         ),
         // floatingActionButton: FloatingActionButton(

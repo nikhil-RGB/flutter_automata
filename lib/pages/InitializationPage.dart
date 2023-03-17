@@ -50,6 +50,8 @@ class _InitializationPageState extends State<InitializationPage> {
               child: CellGrid(
                 grid: widget.grid,
                 initPage: true,
+                // live: Colors.cyan,
+                // dead: Colors.grey,
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),

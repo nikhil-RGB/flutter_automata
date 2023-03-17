@@ -87,6 +87,8 @@ class _CellGridState extends State<CellGrid> {
     return widget.initPage
         ? CellButton(
             cell: ref,
+            live: widget.live,
+            dead: widget.dead,
           )
         : Container(
             height: 20,

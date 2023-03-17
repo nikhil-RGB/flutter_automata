@@ -17,12 +17,12 @@ class CellGrid extends StatefulWidget {
   CellGrid(
       {super.key,
       required this.grid,
-      this.live = Colors.green,
-      this.dead = Colors.red,
+      this.live = Colors.cyan,
+      this.dead = Colors.grey,
       required this.initPage}) {
     int columns = grid[0].length;
     while (columns > 0 && spacing > 0) {
-      spacing = spacing - 0.5;
+      spacing = spacing - 0.58;
       columns = columns - 10;
     }
     spacing = (spacing <= 0) ? 0.02 : spacing;

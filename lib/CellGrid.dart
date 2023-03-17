@@ -41,14 +41,19 @@ class _CellGridState extends State<CellGrid> {
       child: Center(
         child: Container(
           // ignore: prefer_const_constructors
+
           decoration: BoxDecoration(
-            color: Colors.black,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(7),
+            color: const Color(0x1AD9D9D9),
           ),
+          margin:
+              const EdgeInsets.only(top: 5, bottom: 10, left: 10, right: 10),
           padding: const EdgeInsets.only(
             right: 12,
             left: 12,
-            top: 4,
-            bottom: 4,
+            top: 20,
+            bottom: 20,
           ),
           child: Center(
             child: NotificationListener<OverscrollIndicatorNotification>(

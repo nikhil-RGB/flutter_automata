@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/Cell.dart';
@@ -25,38 +26,48 @@ class AutomatonPage extends StatefulWidget {
 class _AutomatonPageState extends State<AutomatonPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cellular automata"),
-      ),
-      body: CellGrid(
-        grid: widget.grid,
-        initPage: false,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (AutomatonPage.running) {
-            setState(() {
-              AutomatonPage.running = Cell.generationUpdate(
-                  widget.grid, widget.lb, widget.ub, widget.ress);
-            });
-            if (!AutomatonPage.running) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: const Text("Cellular automata"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Phoenix.rebirth(context);
+                },
+                icon: const Icon(Icons.restart_alt_rounded))
+          ],
+        ),
+        body: CellGrid(
+          grid: widget.grid,
+          initPage: false,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            if (AutomatonPage.running) {
+              setState(() {
+                AutomatonPage.running = Cell.generationUpdate(
+                    widget.grid, widget.lb, widget.ub, widget.ress);
+              });
+              if (!AutomatonPage.running) {
+                await openInfoDialog(
+                    context: context,
+                    details:
+                        "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
+                    title: "Automaton Stabilized");
+              }
+            } else {
               await openInfoDialog(
                   context: context,
                   details:
                       "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
-                  title: "Automaton Stabilized");
+                  title: "Grid Biome Disabled");
             }
-          } else {
-            await openInfoDialog(
-                context: context,
-                details:
-                    "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
-                title: "Grid Biome Disabled");
-          }
-        },
-        backgroundColor: Colors.cyan,
-        child: const Icon(Icons.play_arrow_rounded),
+          },
+          backgroundColor: Colors.cyan,
+          child: const Icon(Icons.play_arrow_rounded),
+        ),
       ),
     );
   }

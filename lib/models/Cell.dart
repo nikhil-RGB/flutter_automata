@@ -301,4 +301,15 @@ class Cell {
     return Cell(
         position: this.position, state: this.state, newState: this.newState);
   }
+
+  //This function resets all cells in the grid to dead state.
+  static void clearGrid(List<List<Cell>> grid) {
+    for (int i = 0; i < grid.length; ++i) {
+      for (int j = 0; j < grid[i].length; ++j) {
+        Cell c = grid[i][j];
+        c.state = false;
+        c.newState = false;
+      }
+    }
+  }
 }

@@ -1,13 +1,13 @@
 // ignore_for_file: file_names, must_be_immutable
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellButton.dart';
 
 import 'models/Cell.dart';
 
 class CellGrid extends StatefulWidget {
+  double spacing = 5.0;
+
   Color dead;
   Color live;
   bool
@@ -19,7 +19,14 @@ class CellGrid extends StatefulWidget {
       required this.grid,
       this.live = Colors.green,
       this.dead = Colors.red,
-      required this.initPage});
+      required this.initPage}) {
+    int columns = grid[0].length;
+    while (columns > 0 && spacing > 0) {
+      spacing = spacing - 0.5;
+      columns = columns - 10;
+    }
+    spacing = (spacing <= 0) ? 0.02 : spacing;
+  }
 
   @override
   State<CellGrid> createState() => _CellGridState();
@@ -65,8 +72,8 @@ class _CellGridState extends State<CellGrid> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(0),
                 crossAxisCount: widget.grid[0].length,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
+                crossAxisSpacing: widget.spacing,
+                mainAxisSpacing: widget.spacing,
                 children: compress(widget.buttons),
               ),
             ),

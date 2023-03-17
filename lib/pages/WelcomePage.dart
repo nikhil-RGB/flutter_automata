@@ -4,9 +4,9 @@ import 'package:flutter_automata/util/DialogManager.dart';
 
 class WelcomePage extends StatelessWidget {
   static const int minRows = 2;
-  static const int maxRows = 60;
+  static const int maxRows = 100;
   static const int minCols = 2;
-  static const int maxCols = 60;
+  static const int maxCols = 100;
   String s = "";
   int x;
   int y;

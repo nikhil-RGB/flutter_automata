@@ -7,6 +7,7 @@ import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 import 'package:flutter_automata/pages/InitializationPage.dart';
 import 'package:flutter_automata/pages/WelcomePage.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'models/Cell.dart';
 
@@ -18,7 +19,7 @@ const Point dimensions = Point(22, 22);
 const int alives = 150;
 
 void main() {
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

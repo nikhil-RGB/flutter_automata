@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/Cell.dart';
@@ -31,24 +31,34 @@ class _AutomatonPageState extends State<AutomatonPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          actions: [
-            generationLabel(),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.06,
+        // appBar: AppBar(
+        //   backgroundColor: Colors.black,
+        //   actions: [
+        //     generationLabel(),
+        //     SizedBox(
+        //       width: MediaQuery.of(context).size.width * 0.06,
+        //     ),
+        //     IconButton(
+        //         color: Colors.cyan,
+        //         onPressed: () {
+        //           Phoenix.rebirth(context);
+        //         },
+        //         icon: const Icon(Icons.restart_alt_rounded))
+        //   ],
+        // ),
+        body: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            generateToolBar(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            generateFunctionalities(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            CellGrid(
+              grid: widget.grid,
+              initPage: false,
             ),
-            IconButton(
-                color: Colors.cyan,
-                onPressed: () {
-                  Phoenix.rebirth(context);
-                },
-                icon: const Icon(Icons.restart_alt_rounded))
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           ],
-        ),
-        body: CellGrid(
-          grid: widget.grid,
-          initPage: false,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
@@ -125,6 +135,102 @@ class _AutomatonPageState extends State<AutomatonPage> {
     return Text(
       "Generation Count: ${widget.generationCount}",
       style: const TextStyle(color: Colors.cyan),
+    );
+  }
+
+  Widget generateToolBar() {
+    return Row(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                )),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.01,
+            ),
+            const Text(
+              "Go Back",
+              style: TextStyle(color: Colors.white),
+            )
+          ],
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.27,
+        ),
+        generationLabel(),
+      ],
+    );
+  }
+
+  Column generateFunctionalities() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        OutlinedButton(
+            style: OutlinedButton.styleFrom(
+                side: const BorderSide(
+              color: Colors.cyan,
+              width: 2,
+            )),
+            onPressed: () {
+              AutomatonPage.running = false;
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.delete_forever_outlined,
+                  color: Colors.cyan,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.01,
+                ),
+                const Text(
+                  "FORCE KILL SYSTEM",
+                  style: TextStyle(color: Colors.cyan),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.008,
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Checkbox(
+                fillColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Colors.cyan.withOpacity(.32);
+                  }
+                  return Colors.cyan;
+                }),
+                activeColor: Colors.tealAccent,
+                checkColor: Colors.white,
+                value: AutomatonPage.automate,
+                onChanged: (value) {
+                  setState(() {
+                    AutomatonPage.automate = value!;
+                  });
+                }),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.01,
+            ),
+            const Text(
+              "Automate progression",
+              style: TextStyle(color: Colors.cyan),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

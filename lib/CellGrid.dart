@@ -6,7 +6,7 @@ import 'package:flutter_automata/CellButton.dart';
 import 'models/Cell.dart';
 
 class CellGrid extends StatefulWidget {
-  double spacing = 5.0;
+  double spacing = 4.4;
 
   Color dead;
   Color live;

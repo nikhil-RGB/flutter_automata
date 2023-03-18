@@ -11,6 +11,8 @@ class AutomatonPage extends StatefulWidget {
   @override
   State<AutomatonPage> createState() => _AutomatonPageState();
   static bool running = true;
+  static bool automate = false;
+  int generationCount = 0;
   int ub;
   int lb;
   int ress;
@@ -30,9 +32,14 @@ class _AutomatonPageState extends State<AutomatonPage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text("Cellular automata"),
+          backgroundColor: Colors.black,
           actions: [
+            generationLabel(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.06,
+            ),
             IconButton(
+                color: Colors.cyan,
                 onPressed: () {
                   Phoenix.rebirth(context);
                 },
@@ -49,6 +56,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
               setState(() {
                 AutomatonPage.running = Cell.generationUpdate(
                     widget.grid, widget.lb, widget.ub, widget.ress);
+                ++widget.generationCount;
               });
               if (!AutomatonPage.running) {
                 await openInfoDialog(
@@ -106,4 +114,17 @@ class _AutomatonPageState extends State<AutomatonPage> {
           );
         },
       );
+
+  Widget generationLabel() {
+    String lab = "";
+    int gc = widget.generationCount;
+    lab = gc.toString();
+    if (gc < 10) {
+      lab = "0$lab";
+    }
+    return Text(
+      "Generation Count: ${widget.generationCount}",
+      style: const TextStyle(color: Colors.cyan),
+    );
+  }
 }

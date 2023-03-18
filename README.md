@@ -1,5 +1,11 @@
 # flutter_automata
 
+<div align="center">
+<img width="267" alt="Screenshot 2023-03-06 140751" src="https://user-images.githubusercontent.com/68727041/223059094-2be07555-0bb2-467c-8802-a7a0467b0328.png">
+</div>
+
+<br>
+
 A flutter app to emulate the growth and control of a cell grid based on the concept of "Connway's Game of Life" to demonstrate "Cellular automata".
 
 # Project Purpose and Explanation
@@ -18,3 +24,8 @@ If a cell is alive and has two or three live neighbors, it remains alive.
 If a cell is dead and has exactly three live neighbors, it comes to life.
 In all other cases, a cell dies or remains dead.
 These simple rules can generate patterns ranging from simple oscillators to complex shapes that evolve over time. The Game of Life is often used as an example of cellular automata and is widely studied by mathematicians, computer scientists, and other researchers interested in complex systems and emergent behavior.
+
+> **Note**
+> ### This project is heavy in development, and only core functionalities have been added so far
+
+

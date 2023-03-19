@@ -62,6 +62,9 @@ class _AutomatonPageState extends State<AutomatonPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
+            if (AutomatonPage.automate) {
+              return;
+            }
             if (AutomatonPage.running) {
               setState(() {
                 AutomatonPage.running = Cell.generationUpdate(
@@ -83,7 +86,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
                   title: "Grid Biome Disabled");
             }
           },
-          backgroundColor: Colors.cyan,
+          backgroundColor: AutomatonPage.automate ? Colors.grey : Colors.cyan,
           child: const Icon(Icons.play_arrow_rounded),
         ),
       ),
@@ -208,7 +211,8 @@ class _AutomatonPageState extends State<AutomatonPage> {
             Checkbox(
                 fillColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled)) {
+                  if (states.contains(MaterialState.disabled) ||
+                      !AutomatonPage.running) {
                     return Colors.cyan.withOpacity(.32);
                   }
                   return Colors.cyan;
@@ -217,9 +221,15 @@ class _AutomatonPageState extends State<AutomatonPage> {
                 checkColor: Colors.white,
                 value: AutomatonPage.automate,
                 onChanged: (value) {
+                  if (!AutomatonPage.running) {
+                    return;
+                  }
                   setState(() {
                     AutomatonPage.automate = value!;
                   });
+                  if (AutomatonPage.automate) {
+                    automateCalculation();
+                  }
                 }),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.01,
@@ -232,5 +242,24 @@ class _AutomatonPageState extends State<AutomatonPage> {
         ),
       ],
     );
+  }
+
+  Future automateCalculation() async {
+    while (AutomatonPage.running && AutomatonPage.automate) {
+      await Future.delayed(const Duration(milliseconds: 300), () async {
+        setState(() {
+          AutomatonPage.running = Cell.generationUpdate(
+              widget.grid, widget.lb, widget.ub, widget.ress);
+          ++widget.generationCount;
+        });
+        if (!AutomatonPage.running) {
+          await openInfoDialog(
+              context: context,
+              details:
+                  "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
+              title: "Automaton Stabilized");
+        }
+      });
+    }
   }
 }

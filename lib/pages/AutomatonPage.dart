@@ -176,76 +176,83 @@ class _AutomatonPageState extends State<AutomatonPage> {
     );
   }
 
-  Column generateFunctionalities() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
+  Widget generateFunctionalities() {
+    return Row(
       children: [
-        OutlinedButton(
-            style: OutlinedButton.styleFrom(
-                side: const BorderSide(
-              color: Colors.cyan,
-              width: 2,
-            )),
-            onPressed: () {
-              setState(() {
-                AutomatonPage.running = false;
-              });
-            },
-            child: Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                  color: Colors.cyan,
+                  width: 2,
+                )),
+                onPressed: () {
+                  setState(() {
+                    AutomatonPage.running = false;
+                  });
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.delete_forever_outlined,
+                      color: Colors.cyan,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.01,
+                    ),
+                    const Text(
+                      "FORCE KILL SYSTEM",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ],
+                )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.008,
+            ),
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.delete_forever_outlined,
-                  color: Colors.cyan,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
+                Checkbox(
+                    fillColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled) ||
+                          !AutomatonPage.running) {
+                        return Colors.cyan.withOpacity(.32);
+                      }
+                      return Colors.cyan;
+                    }),
+                    activeColor: Colors.tealAccent,
+                    checkColor: Colors.white,
+                    value: AutomatonPage.automate,
+                    onChanged: (value) {
+                      if (!AutomatonPage.running) {
+                        return;
+                      }
+                      setState(() {
+                        AutomatonPage.automate = value!;
+                      });
+                      if (AutomatonPage.automate) {
+                        automateCalculation();
+                      }
+                    }),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.01,
+                // ),
                 const Text(
-                  "FORCE KILL SYSTEM",
+                  "Automate progression",
                   style: TextStyle(color: Colors.cyan),
                 ),
               ],
-            )),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.008,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Checkbox(
-                fillColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled) ||
-                      !AutomatonPage.running) {
-                    return Colors.cyan.withOpacity(.32);
-                  }
-                  return Colors.cyan;
-                }),
-                activeColor: Colors.tealAccent,
-                checkColor: Colors.white,
-                value: AutomatonPage.automate,
-                onChanged: (value) {
-                  if (!AutomatonPage.running) {
-                    return;
-                  }
-                  setState(() {
-                    AutomatonPage.automate = value!;
-                  });
-                  if (AutomatonPage.automate) {
-                    automateCalculation();
-                  }
-                }),
-            // SizedBox(
-            //   width: MediaQuery.of(context).size.width * 0.01,
-            // ),
-            const Text(
-              "Automate progression",
-              style: TextStyle(color: Colors.cyan),
             ),
           ],
         ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.4,
+        )
       ],
     );
   }

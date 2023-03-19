@@ -7,6 +7,7 @@ import 'models/Cell.dart';
 
 class CellGrid extends StatefulWidget {
   double spacing = 4.4;
+  bool pretty;
 
   Color dead;
   Color live;
@@ -16,16 +17,21 @@ class CellGrid extends StatefulWidget {
   List<List<Widget>> buttons = []; //list of buttons
   CellGrid(
       {super.key,
+      required this.pretty,
       required this.grid,
       this.live = Colors.cyan,
       this.dead = Colors.grey,
       required this.initPage}) {
-    int columns = grid[0].length;
-    while (columns > 0 && spacing > 0) {
-      spacing = spacing - 0.58;
-      columns = columns - 10;
+    if (pretty) {
+      spacing = 0;
+    } else {
+      int columns = grid[0].length;
+      while (columns > 0 && spacing > 0) {
+        spacing = spacing - 0.58;
+        columns = columns - 10;
+      }
+      spacing = (spacing <= 0) ? 0.02 : spacing;
     }
-    spacing = (spacing <= 0) ? 0.02 : spacing;
   }
 
   @override

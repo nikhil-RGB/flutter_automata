@@ -12,6 +12,7 @@ class AutomatonPage extends StatefulWidget {
   State<AutomatonPage> createState() => _AutomatonPageState();
   static bool running = true;
   static bool automate = false;
+  bool beautify_mode;
   int generationCount = 0;
   int ub;
   int lb;
@@ -22,7 +23,9 @@ class AutomatonPage extends StatefulWidget {
       required this.grid,
       required this.ub,
       required this.lb,
-      required this.ress});
+      // ignore: non_constant_identifier_names
+      required this.ress,
+      required this.beautify_mode});
 }
 
 class _AutomatonPageState extends State<AutomatonPage> {
@@ -54,6 +57,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
             generateFunctionalities(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             CellGrid(
+              pretty: widget.beautify_mode,
               grid: widget.grid,
               initPage: false,
             ),
@@ -165,7 +169,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
           ],
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.27,
+          width: MediaQuery.of(context).size.width * 0.23,
         ),
         generationLabel(),
       ],
@@ -184,7 +188,9 @@ class _AutomatonPageState extends State<AutomatonPage> {
               width: 2,
             )),
             onPressed: () {
-              AutomatonPage.running = false;
+              setState(() {
+                AutomatonPage.running = false;
+              });
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -231,9 +237,9 @@ class _AutomatonPageState extends State<AutomatonPage> {
                     automateCalculation();
                   }
                 }),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.01,
-            ),
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width * 0.01,
+            // ),
             const Text(
               "Automate progression",
               style: TextStyle(color: Colors.cyan),
@@ -246,7 +252,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
 
   Future automateCalculation() async {
     while (AutomatonPage.running && AutomatonPage.automate) {
-      await Future.delayed(const Duration(milliseconds: 300), () async {
+      await Future.delayed(const Duration(milliseconds: 100), () async {
         setState(() {
           AutomatonPage.running = Cell.generationUpdate(
               widget.grid, widget.lb, widget.ub, widget.ress);

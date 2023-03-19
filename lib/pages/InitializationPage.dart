@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 import 'package:flutter_automata/util/DialogManager.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/Cell.dart';
@@ -14,10 +15,12 @@ class InitializationPage extends StatefulWidget {
   State<InitializationPage> createState() => _InitializationPageState();
   final int x; //Number of rows
   final int y; //Number of columns
+  bool beautify = false;
   late List<List<Cell>> grid; //Grid of cells
   int ub;
   int lb;
   int ress;
+
   InitializationPage(this.x, this.y,
       {super.key, required this.ub, required this.lb, required this.ress}) {
     grid = Cell.generateGrid(Point(x, y));
@@ -46,8 +49,11 @@ class _InitializationPageState extends State<InitializationPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             generateAppBar(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            toolsSection(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Expanded(
               child: CellGrid(
+                pretty: false,
                 grid: widget.grid,
                 initPage: true,
                 // live: Colors.cyan,
@@ -101,13 +107,7 @@ class _InitializationPageState extends State<InitializationPage> {
               PopupMenuItem(
                   value: 3,
                   child: Text(
-                    "Randomize Initial configuration.",
-                    style: GoogleFonts.sourceCodePro(color: Colors.white),
-                  )),
-              PopupMenuItem(
-                  value: 4,
-                  child: Text(
-                    "Reset Board",
+                    "Exit Interface",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
             ],
@@ -144,24 +144,7 @@ class _InitializationPageState extends State<InitializationPage> {
               break;
             case 3:
               {
-                int alivec = await DialogManager.openNumericalDialog(
-                  max: widget.grid.length * widget.grid[0].length,
-                  context: ctxt!,
-                  title: "Input minimum number of cells required to be alive",
-                );
-                if (alivec == -1) {
-                  return;
-                }
-                setState(() {
-                  Cell.setRandomLive(widget.grid, alivec);
-                });
-              }
-              break;
-            case 4:
-              {
-                setState(() {
-                  Cell.clearGrid(widget.grid);
-                });
+                Phoenix.rebirth(context);
               }
               break;
           }
@@ -192,6 +175,7 @@ class _InitializationPageState extends State<InitializationPage> {
                 context,
                 MaterialPageRoute(
                     builder: ((context) => AutomatonPage(
+                        beautify_mode: widget.beautify,
                         grid: Cell.cloneGrid(widget.grid),
                         ub: widget.ub,
                         lb: widget.lb,
@@ -199,6 +183,102 @@ class _InitializationPageState extends State<InitializationPage> {
           },
         ),
         SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+      ],
+    );
+  }
+
+  Widget toolsSection() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                  color: Colors.cyan,
+                  width: 2,
+                )),
+                onPressed: () async {
+                  int alivec = await DialogManager.openNumericalDialog(
+                    max: widget.grid.length * widget.grid[0].length,
+                    context: ctxt!,
+                    title: "Input minimum number of cells required to be alive",
+                  );
+                  if (alivec == -1) {
+                    return;
+                  }
+                  setState(() {
+                    Cell.setRandomLive(widget.grid, alivec);
+                  });
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      "Randomize Configuration",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ],
+                )),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                  color: Colors.cyan,
+                  width: 2,
+                )),
+                onPressed: () {
+                  setState(() {
+                    Cell.clearGrid(widget.grid);
+                  });
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      "Reset Board",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ],
+                )),
+          ],
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Checkbox(
+                fillColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Colors.cyan.withOpacity(.32);
+                  }
+                  return Colors.cyan;
+                }),
+                activeColor: Colors.tealAccent,
+                checkColor: Colors.white,
+                value: widget.beautify,
+                onChanged: (value) {
+                  setState(() {
+                    widget.beautify = value!;
+                  });
+                }),
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width * 0.002,
+            // ),
+            const Text(
+              "Classic Mode",
+              style: TextStyle(color: Colors.cyan),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.53,
+            ),
+          ],
+        ),
       ],
     );
   }

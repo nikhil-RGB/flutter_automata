@@ -11,8 +11,8 @@ class CellButton extends StatefulWidget {
   const CellButton({
     super.key,
     required this.cell,
-    this.live = Colors.green,
-    this.dead = Colors.red,
+    required this.live,
+    required this.dead,
   });
   @override
   State<CellButton> createState() => _CellButtonState();

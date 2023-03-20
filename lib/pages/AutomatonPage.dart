@@ -66,7 +66,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            if (AutomatonPage.automate) {
+            if (AutomatonPage.automate || !AutomatonPage.running) {
               return;
             }
             if (AutomatonPage.running) {
@@ -90,7 +90,9 @@ class _AutomatonPageState extends State<AutomatonPage> {
                   title: "Grid Biome Disabled");
             }
           },
-          backgroundColor: AutomatonPage.automate ? Colors.grey : Colors.cyan,
+          backgroundColor: (AutomatonPage.automate || (!AutomatonPage.running))
+              ? Colors.grey
+              : Colors.cyan,
           child: const Icon(Icons.play_arrow_rounded),
         ),
       ),
@@ -153,6 +155,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
           children: [
             IconButton(
                 onPressed: () {
+                  AutomatonPage.automate = false;
                   Navigator.pop(context);
                 },
                 icon: const Icon(
@@ -185,11 +188,14 @@ class _AutomatonPageState extends State<AutomatonPage> {
           children: [
             OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                    side: const BorderSide(
-                  color: Colors.cyan,
+                    side: BorderSide(
+                  color: (AutomatonPage.automate) ? Colors.grey : Colors.cyan,
                   width: 2,
                 )),
                 onPressed: () {
+                  if (AutomatonPage.automate) {
+                    return;
+                  }
                   setState(() {
                     AutomatonPage.running = false;
                   });
@@ -197,16 +203,21 @@ class _AutomatonPageState extends State<AutomatonPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.delete_forever_outlined,
-                      color: Colors.cyan,
+                      color:
+                          (AutomatonPage.automate) ? Colors.grey : Colors.cyan,
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.01,
                     ),
-                    const Text(
+                    Text(
                       "FORCE KILL SYSTEM",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(
+                        color: (AutomatonPage.automate)
+                            ? Colors.grey
+                            : Colors.cyan,
+                      ),
                     ),
                   ],
                 )),
@@ -266,6 +277,10 @@ class _AutomatonPageState extends State<AutomatonPage> {
           ++widget.generationCount;
         });
         if (!AutomatonPage.running) {
+          setState(() {
+            AutomatonPage.automate = false;
+          });
+
           await openInfoDialog(
               context: context,
               details:

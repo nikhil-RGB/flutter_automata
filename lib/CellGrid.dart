@@ -58,7 +58,7 @@ class _CellGridState extends State<CellGrid> {
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(7),
-            color: const Color(0x1AD9D9D9),
+            color: (widget.pretty) ? Colors.black : const Color(0x1AD9D9D9),
           ),
           margin:
               const EdgeInsets.only(top: 5, bottom: 10, left: 10, right: 10),
@@ -99,7 +99,11 @@ class _CellGridState extends State<CellGrid> {
         : Container(
             height: 20,
             decoration: BoxDecoration(
-              color: ref.state ? widget.live : widget.dead,
+              color: ref.state
+                  ? widget.live
+                  : (widget.pretty)
+                      ? Colors.black
+                      : widget.dead,
             ),
           );
   }

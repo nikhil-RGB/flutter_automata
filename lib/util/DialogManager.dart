@@ -570,4 +570,120 @@ class DialogManager {
     }
     return null;
   }
+
+  static Future openTimeDialog({
+    required BuildContext context,
+    String title = "Input time gap between generations(ms)!",
+    required int min,
+    required int current,
+  }) {
+    TextEditingController num_dialog = TextEditingController(
+      text: current.toString(),
+    );
+    // ignore: no_leading_underscores_for_local_identifiers
+    final GlobalKey<FormState> _formKeynum = GlobalKey<FormState>();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+            title: Text(
+              title,
+              style: GoogleFonts.sourceCodePro(
+                color: Colors.cyan,
+              ),
+            ),
+            backgroundColor: const Color(0XFF004246),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Text(
+                    "Please note that time gaps are added over to computational time cost, if your grid is very large(>2500/>3000 cell),\n it is optimal to input a value such as 10ms or 20ms for a smoother automata. ",
+                    style: TextStyle(
+                      color: Colors.cyan,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                  ),
+                  Form(
+                    key: _formKeynum,
+                    child: TextFormField(
+                      style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: num_dialog,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: "Time gap",
+                        alignLabelWithHint: true,
+                        labelStyle: GoogleFonts.sourceCodePro(
+                            fontSize: 15,
+                            color: Colors.cyan,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400),
+                        floatingLabelStyle:
+                            GoogleFonts.sourceCodePro(color: Colors.cyan),
+                        hintStyle: GoogleFonts.sourceCodePro(
+                            color: Colors.cyan, fontSize: 14),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 3, color: Colors.cyan),
+                            borderRadius: BorderRadius.circular(50.0)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.teal), //<-- SEE HERE
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 3, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        try {
+                          if (int.parse(value!) < min) {
+                            return "Time gap cannot be lesser than $min";
+                          }
+                        } catch (_) {
+                          return "Invalid input!";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  //cancel
+                  Navigator.pop(context, -1);
+                },
+                child: Text("Cancel", style: GoogleFonts.sourceCodePro()),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  //confirm
+                  if (_formKeynum.currentState!.validate()) {
+                    //passing data back, it is valid
+                    Navigator.pop(context, int.parse(num_dialog.text));
+                  }
+                },
+                child: Text("Confirm", style: GoogleFonts.sourceCodePro()),
+              ),
+            ],
+          );
+        });
+  }
 }

@@ -20,6 +20,8 @@ class InitializationPage extends StatefulWidget {
   int ub;
   int lb;
   int ress;
+  int time = 200;
+  static int minTime = 10;
 
   InitializationPage(this.x, this.y,
       {super.key, required this.ub, required this.lb, required this.ress}) {
@@ -29,6 +31,14 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPageState extends State<InitializationPage> {
   BuildContext? ctxt;
+  @override
+  void initState() {
+    // TODO: implement initState
+    widget.time = calculateOptimalTimeFor(
+        cols: widget.grid[0].length, rows: widget.grid.length);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ctxt = context;
@@ -132,8 +142,13 @@ class _InitializationPageState extends State<InitializationPage> {
               break;
             case 1:
               {
-                DialogManager.openInfoDialog(
-                    details: "Not implemented yet!", context: context);
+                // DialogManager.openInfoDialog(
+                //     details: "Not implemented yet!", context: context);
+                widget.time = await DialogManager.openTimeDialog(
+                  context: context,
+                  min: InitializationPage.minTime,
+                  current: widget.time,
+                );
               }
               break;
             case 2:
@@ -175,6 +190,7 @@ class _InitializationPageState extends State<InitializationPage> {
                 context,
                 MaterialPageRoute(
                     builder: ((context) => AutomatonPage(
+                        timeGap: widget.time,
                         beautify_mode: widget.beautify,
                         grid: Cell.cloneGrid(widget.grid),
                         ub: widget.ub,
@@ -281,5 +297,20 @@ class _InitializationPageState extends State<InitializationPage> {
         ),
       ],
     );
+  }
+
+  int calculateOptimalTimeFor({required int cols, required int rows}) {
+    int total = rows * cols;
+    int time = 0;
+    if (total > 4000) {
+      time = 11;
+    } else if (total > 2500) {
+      time = 30;
+    } else if (total > 1000) {
+      time = 50;
+    } else {
+      time = 200;
+    }
+    return time;
   }
 }

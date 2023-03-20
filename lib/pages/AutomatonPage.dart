@@ -17,9 +17,11 @@ class AutomatonPage extends StatefulWidget {
   int ub;
   int lb;
   int ress;
+  int timeGap;
   final List<List<Cell>> grid; //grid which will be used to build the board
   AutomatonPage(
       {super.key,
+      required this.timeGap,
       required this.grid,
       required this.ub,
       required this.lb,
@@ -270,7 +272,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
 
   Future automateCalculation() async {
     while (AutomatonPage.running && AutomatonPage.automate) {
-      await Future.delayed(const Duration(milliseconds: 100), () async {
+      await Future.delayed(Duration(milliseconds: widget.timeGap), () async {
         setState(() {
           AutomatonPage.running = Cell.generationUpdate(
               widget.grid, widget.lb, widget.ub, widget.ress);

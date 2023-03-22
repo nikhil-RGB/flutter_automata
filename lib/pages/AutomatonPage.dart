@@ -58,10 +58,12 @@ class _AutomatonPageState extends State<AutomatonPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             generateFunctionalities(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-            CellGrid(
-              pretty: widget.beautify_mode,
-              grid: widget.grid,
-              initPage: false,
+            Expanded(
+              child: CellGrid(
+                pretty: widget.beautify_mode,
+                grid: widget.grid,
+                initPage: false,
+              ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           ],

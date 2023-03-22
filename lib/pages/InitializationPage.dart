@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
+import 'package:flutter_automata/pages/EncrypterPage.dart';
 import 'package:flutter_automata/util/DialogManager.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -120,6 +121,12 @@ class _InitializationPageState extends State<InitializationPage> {
                     "Exit Interface",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
+              PopupMenuItem(
+                  value: 4,
+                  child: Text(
+                    "Simulate Encryption Keys[BETA]",
+                    style: GoogleFonts.sourceCodePro(color: Colors.white),
+                  )),
             ],
         onSelected: (value) async {
           switch (value) {
@@ -160,6 +167,21 @@ class _InitializationPageState extends State<InitializationPage> {
             case 3:
               {
                 Phoenix.rebirth(context);
+              }
+              break;
+            case 4:
+              {
+                EncrypterPage.running = true;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => EncrypterPage(
+                            timeGap: widget.time,
+                            beautify_mode: widget.beautify,
+                            grid: Cell.cloneGrid(widget.grid),
+                            ub: widget.ub,
+                            lb: widget.lb,
+                            ress: widget.ress))));
               }
               break;
           }

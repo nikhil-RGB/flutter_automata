@@ -193,11 +193,13 @@ class _AutomatonPageState extends State<AutomatonPage> {
             OutlinedButton(
                 style: OutlinedButton.styleFrom(
                     side: BorderSide(
-                  color: (AutomatonPage.automate) ? Colors.grey : Colors.cyan,
+                  color: (AutomatonPage.automate || (!AutomatonPage.running))
+                      ? Colors.grey
+                      : Colors.cyan,
                   width: 2,
                 )),
                 onPressed: () {
-                  if (AutomatonPage.automate) {
+                  if (AutomatonPage.automate || (!AutomatonPage.running)) {
                     return;
                   }
                   setState(() {
@@ -210,7 +212,9 @@ class _AutomatonPageState extends State<AutomatonPage> {
                     Icon(
                       Icons.delete_forever_outlined,
                       color:
-                          (AutomatonPage.automate) ? Colors.grey : Colors.cyan,
+                          (AutomatonPage.automate || (!AutomatonPage.running))
+                              ? Colors.grey
+                              : Colors.cyan,
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.01,
@@ -218,9 +222,10 @@ class _AutomatonPageState extends State<AutomatonPage> {
                     Text(
                       "FORCE KILL SYSTEM",
                       style: TextStyle(
-                        color: (AutomatonPage.automate)
-                            ? Colors.grey
-                            : Colors.cyan,
+                        color:
+                            (AutomatonPage.automate || (!AutomatonPage.running))
+                                ? Colors.grey
+                                : Colors.cyan,
                       ),
                     ),
                   ],

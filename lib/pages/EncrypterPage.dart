@@ -11,17 +11,16 @@ class EncrypterPage extends StatefulWidget {
   @override
   State<EncrypterPage> createState() => _EncrypterPageState();
   static bool running = true;
-  static bool automate = false;
+
   bool beautify_mode;
   int generationCount = 0;
   int ub;
   int lb;
   int ress;
-  int timeGap;
+
   final List<List<Cell>> grid; //grid which will be used to build the board
   EncrypterPage(
       {super.key,
-      required this.timeGap,
       required this.grid,
       required this.ub,
       required this.lb,
@@ -59,26 +58,25 @@ class _EncrypterPageState extends State<EncrypterPage> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             generateToolBar(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            generateFunctionalities(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            infoField(txtc: binary, label: "Binary Text"),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            infoField(txtc: binary, label: "Binary Text"),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            infoField(txtc: ascii, label: "ASCII value"),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Expanded(
+              flex: 8,
               child: CellGrid(
                 pretty: widget.beautify_mode,
                 grid: widget.grid,
                 initPage: false,
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            infoField(txtc: ascii, label: "ASCII value"),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            if (EncrypterPage.automate || !EncrypterPage.running) {
+            if (!EncrypterPage.running) {
               return;
             }
             if (EncrypterPage.running) {
@@ -102,9 +100,7 @@ class _EncrypterPageState extends State<EncrypterPage> {
                   title: "Grid Biome Disabled");
             }
           },
-          backgroundColor: (EncrypterPage.automate || (!EncrypterPage.running))
-              ? Colors.grey
-              : Colors.cyan,
+          backgroundColor: (!EncrypterPage.running) ? Colors.grey : Colors.cyan,
           child: const Icon(Icons.play_arrow_rounded),
         ),
       ),
@@ -167,7 +163,6 @@ class _EncrypterPageState extends State<EncrypterPage> {
           children: [
             IconButton(
                 onPressed: () {
-                  EncrypterPage.automate = false;
                   Navigator.pop(context);
                 },
                 icon: const Icon(
@@ -191,125 +186,14 @@ class _EncrypterPageState extends State<EncrypterPage> {
     );
   }
 
-  Widget generateFunctionalities() {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                  color: (EncrypterPage.automate) ? Colors.grey : Colors.cyan,
-                  width: 2,
-                )),
-                onPressed: () {
-                  if (EncrypterPage.automate) {
-                    return;
-                  }
-                  setState(() {
-                    EncrypterPage.running = false;
-                  });
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.delete_forever_outlined,
-                      color:
-                          (EncrypterPage.automate) ? Colors.grey : Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.01,
-                    ),
-                    Text(
-                      "FORCE KILL SYSTEM",
-                      style: TextStyle(
-                        color: (EncrypterPage.automate)
-                            ? Colors.grey
-                            : Colors.cyan,
-                      ),
-                    ),
-                  ],
-                )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.008,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Checkbox(
-                    fillColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled) ||
-                          !EncrypterPage.running) {
-                        return Colors.cyan.withOpacity(.32);
-                      }
-                      return Colors.cyan;
-                    }),
-                    activeColor: Colors.tealAccent,
-                    checkColor: Colors.white,
-                    value: EncrypterPage.automate,
-                    onChanged: (value) {
-                      if (!EncrypterPage.running) {
-                        return;
-                      }
-                      setState(() {
-                        EncrypterPage.automate = value!;
-                      });
-                      if (EncrypterPage.automate) {
-                        automateCalculation();
-                      }
-                    }),
-                // SizedBox(
-                //   width: MediaQuery.of(context).size.width * 0.01,
-                // ),
-                const Text(
-                  "Automate progression",
-                  style: TextStyle(color: Colors.cyan),
-                ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-        )
-      ],
-    );
-  }
-
-  Future automateCalculation() async {
-    while (EncrypterPage.running && EncrypterPage.automate) {
-      await Future.delayed(Duration(milliseconds: widget.timeGap), () async {
-        setState(() {
-          EncrypterPage.running = Cell.generationUpdate(
-              widget.grid, widget.lb, widget.ub, widget.ress);
-          ++widget.generationCount;
-        });
-        if (!EncrypterPage.running) {
-          setState(() {
-            EncrypterPage.automate = false;
-          });
-
-          await openInfoDialog(
-              context: context,
-              details:
-                  "The Grid system has either stabilized or been force killed.\nNo further growth possible!",
-              title: "Automaton Stabilized");
-        }
-      });
-    }
-  }
-
   Widget infoField(
       {required TextEditingController txtc, required String label}) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.12,
-        width: MediaQuery.of(context).size.width * 0.61,
+        width: MediaQuery.of(context).size.width * 0.80,
         child: TextField(
+            minLines: 3,
+            maxLines: 5,
             readOnly: true,
             style: GoogleFonts.sourceCodePro(color: Colors.cyan),
             controller: txtc,

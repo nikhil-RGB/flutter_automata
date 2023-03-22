@@ -176,7 +176,6 @@ class _InitializationPageState extends State<InitializationPage> {
                     context,
                     MaterialPageRoute(
                         builder: ((context) => EncrypterPage(
-                            timeGap: widget.time,
                             beautify_mode: widget.beautify,
                             grid: Cell.cloneGrid(widget.grid),
                             ub: widget.ub,

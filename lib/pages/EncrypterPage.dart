@@ -30,12 +30,13 @@ class EncrypterPage extends StatefulWidget {
 }
 
 class _EncrypterPageState extends State<EncrypterPage> {
+  TextEditingController binary =
+      TextEditingController(); //TextEditingController for binary
+  TextEditingController ascii =
+      TextEditingController(); //TextEditingController for ascii text area
   @override
   Widget build(BuildContext context) {
-    TextEditingController binary =
-        TextEditingController(); //TextEditingController for binary
-    TextEditingController ascii =
-        TextEditingController(); //TextEditingController for ascii text area
+    binary.text = extractBinaryFromGrid();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -219,6 +220,17 @@ class _EncrypterPageState extends State<EncrypterPage> {
             )),
       ),
     );
+  }
+
+  //This method extracts a binary number from the current grid by coverting live cells to 1 and dead ones to 0
+  String extractBinaryFromGrid() {
+    String binary = "";
+    for (int i = 0; i < widget.grid.length; ++i) {
+      for (int j = 0; j < widget.grid[i].length; ++j) {
+        binary += (widget.grid[i][j].state) ? "1" : "0";
+      }
+    }
+    return binary;
   }
 }
 

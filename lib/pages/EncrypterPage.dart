@@ -37,6 +37,7 @@ class _EncrypterPageState extends State<EncrypterPage> {
   @override
   Widget build(BuildContext context) {
     binary.text = extractBinaryFromGrid();
+    ascii.text = parseUnix(binary.text);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -231,6 +232,22 @@ class _EncrypterPageState extends State<EncrypterPage> {
       }
     }
     return binary;
+  }
+
+  String parseUnix(String binary) {
+    String unix = "";
+    for (int i = 0; i < binary.length; ++i) {
+      String sub = "";
+      if ((i + 12) <= binary.length) {
+        sub = binary.substring(i, (i = i + 12));
+        --i;
+      } else {
+        sub = binary.substring(i);
+        i = binary.length;
+      }
+      unix += String.fromCharCode(int.parse(sub, radix: 2));
+    }
+    return unix;
   }
 }
 

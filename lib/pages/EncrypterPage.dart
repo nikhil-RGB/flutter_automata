@@ -73,7 +73,9 @@ class _EncrypterPageState extends State<EncrypterPage> {
                 initPage: false,
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+            Center(child: viewerButton(context)),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.004),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -248,6 +250,41 @@ class _EncrypterPageState extends State<EncrypterPage> {
       unix += String.fromCharCode(int.parse(sub, radix: 2));
     }
     return unix;
+  }
+
+  Widget viewerButton(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          side: BorderSide(
+        color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan,
+        width: 2,
+      )),
+      onPressed: () {
+        if (!EncrypterPage.running) {
+          return;
+        }
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.02,
+          ),
+          Icon(
+            Icons.visibility_outlined,
+            color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.04,
+          ),
+          Text(
+            "Encryption Demo",
+            style: TextStyle(
+                color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan),
+          ),
+        ],
+      ),
+    );
   }
 }
 

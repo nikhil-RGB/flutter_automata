@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -263,6 +264,8 @@ class _EncrypterPageState extends State<EncrypterPage> {
         if (!EncrypterPage.running) {
           return;
         }
+        DialogManager.openInfoDialog(
+            details: "Not implemented yet!", context: context);
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,

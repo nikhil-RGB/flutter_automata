@@ -116,15 +116,15 @@ class _InitializationPageState extends State<InitializationPage> {
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
               PopupMenuItem(
-                  value: 3,
-                  child: Text(
-                    "Exit Interface",
-                    style: GoogleFonts.sourceCodePro(color: Colors.white),
-                  )),
-              PopupMenuItem(
                   value: 4,
                   child: Text(
                     "Simulate Encryption Keys[BETA]",
+                    style: GoogleFonts.sourceCodePro(color: Colors.white),
+                  )),
+              PopupMenuItem(
+                  value: 3,
+                  child: Text(
+                    "Exit Interface",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
             ],

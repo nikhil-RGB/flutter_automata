@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: unused_import
 import 'package:flutter_automata/models/testing.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
@@ -19,6 +20,13 @@ const Point dimensions = Point(22, 22);
 const int alives = 150;
 
 void main() {
+  // Step 2
+  WidgetsFlutterBinding.ensureInitialized();
+  // Step 3
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(Phoenix(child: const MyApp())));
   runApp(Phoenix(child: const MyApp()));
 }
 

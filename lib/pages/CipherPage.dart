@@ -17,36 +17,45 @@ class _CipherPageState extends State<CipherPage> {
   TextEditingController output = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      // resizeToAvoidBottomInset: false,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.width * 0.15,
-              // ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.02,
+    return SafeArea(
+      child: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          // resizeToAvoidBottomInset: false,
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.width * 0.15,
+                  // ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.02,
+                  ),
+                  modeController(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.01,
+                  ),
+                  generateTextField(context: context, control: input),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.01,
+                  ),
+                  generateControlButton(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.01,
+                  ),
+                  generateTextField(context: context, control: output),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.015,
+                  ),
+                ],
               ),
-              modeController(),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.01,
-              ),
-              generateTextField(context: context, control: input),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.01,
-              ),
-              generateControlButton(),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.01,
-              ),
-              generateTextField(context: context, control: output),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.015,
-              ),
-            ],
+            ),
           ),
         ),
       ),

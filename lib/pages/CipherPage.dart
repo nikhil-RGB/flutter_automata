@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CipherPage extends StatefulWidget {
-  const CipherPage({super.key});
+  static List<String> modes = ["Cipher", "Decipher"];
+
+  CipherPage({super.key});
 
   @override
   State<CipherPage> createState() => _CipherPageState();
 }
 
 class _CipherPageState extends State<CipherPage> {
+  String _currentMode = "Cipher";
   TextEditingController input = TextEditingController();
   TextEditingController output = TextEditingController();
   @override
@@ -23,9 +27,20 @@ class _CipherPageState extends State<CipherPage> {
               // SizedBox(
               //   height: MediaQuery.of(context).size.width * 0.15,
               // ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.02,
+              ),
+              modeController(),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.01,
+              ),
               generateTextField(context: context, control: input),
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.015,
+                height: MediaQuery.of(context).size.width * 0.01,
+              ),
+              generateControlButton(),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.01,
               ),
               generateTextField(context: context, control: output),
               SizedBox(
@@ -98,5 +113,92 @@ class _CipherPageState extends State<CipherPage> {
           color: Colors.white,
           width: 3,
         ));
+  }
+
+  Widget generateControlButton() {
+    return Center(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            side: const BorderSide(
+          color: Colors.cyan,
+          width: 2,
+        )),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.02,
+            ),
+            const Icon(
+              Icons.enhanced_encryption,
+              color: Colors.black,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.02,
+            ),
+            Text(
+              (_currentMode == "Cipher") ? "AES Encrypt" : "AES Decrypt",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  Widget modeController() {
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.cyan,
+        ),
+        child: DropdownButton(
+            underline: Container(
+              height: 0,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            hint: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Select Mode",
+                style: GoogleFonts.sourceCodePro(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            dropdownColor: Colors.cyan,
+            style: GoogleFonts.sourceCodePro(
+                color: Colors.black, //<-- SEE HERE
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+            icon: const Padding(
+              padding: EdgeInsets.only(right: 5.0),
+              child: Icon(
+                Icons.arrow_drop_down_circle,
+                color: Colors.black,
+                size: 16,
+              ),
+            ),
+            items: CipherPage.modes.map((String val) {
+              return DropdownMenuItem(
+                value: val,
+                child: Text(val),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _currentMode = newValue!;
+                _modeSwitch();
+              });
+            }),
+      ),
+    );
+  }
+
+  void _modeSwitch() {
+    input.clear();
+    output.clear();
   }
 }

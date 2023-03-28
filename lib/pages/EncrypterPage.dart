@@ -268,7 +268,12 @@ class _EncrypterPageState extends State<EncrypterPage> {
         // DialogManager.openInfoDialog(
         //     details: "Not implemented yet!", context: context);
         Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => CipherPage())));
+            context,
+            MaterialPageRoute(
+                builder: ((context) => CipherPage(
+                      ascii: ascii.text,
+                      generationCount: widget.generationCount,
+                    ))));
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,

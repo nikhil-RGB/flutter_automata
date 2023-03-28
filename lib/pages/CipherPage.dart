@@ -1,11 +1,18 @@
+import 'dart:convert';
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CipherPage extends StatefulWidget {
   static List<String> modes = ["Cipher", "Decipher"];
-
-  CipherPage({super.key});
+  String ascii;
+  int generationCount;
+  CipherPage({
+    super.key,
+    required this.ascii,
+    required this.generationCount,
+  });
 
   @override
   State<CipherPage> createState() => _CipherPageState();
@@ -83,6 +90,7 @@ class _CipherPageState extends State<CipherPage> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: TextField(
+        readOnly: control == output,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.cyan,
@@ -162,12 +170,22 @@ class _CipherPageState extends State<CipherPage> {
               width: MediaQuery.of(context).size.width * 0.02,
             ),
             Text(
-              (_currentMode == "Cipher") ? "AES Encrypt" : "AES Decrypt",
+              (_currentMode == "Cipher")
+                  ? "Automata Cipher"
+                  : "Automata Decipher",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (input.text.isEmpty) {
+            return;
+          }
+          String result = doOperation(_currentMode == "Cipher");
+          setState(() {
+            output.text = result;
+          });
+        },
       ),
     );
   }
@@ -225,5 +243,25 @@ class _CipherPageState extends State<CipherPage> {
   void _modeSwitch() {
     input.clear();
     output.clear();
+  }
+
+  // true for cipher/false for decipher
+  String doOperation(bool mode) {
+    String inp = input.text;
+    String output = "";
+    for (int i = 0, j = 0; i < inp.length; ++i) {
+      if (mode) {
+        output +=
+            String.fromCharCode(inp.codeUnitAt(i) + widget.ascii.codeUnitAt(j));
+      } else {
+        output +=
+            String.fromCharCode(inp.codeUnitAt(i) - widget.ascii.codeUnitAt(j));
+      }
+      ++j;
+      if (j >= widget.ascii.length) {
+        j = 0;
+      }
+    }
+    return output;
   }
 }

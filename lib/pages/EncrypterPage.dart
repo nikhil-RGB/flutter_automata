@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
+import 'package:flutter_automata/pages/CipherPage.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -73,7 +75,9 @@ class _EncrypterPageState extends State<EncrypterPage> {
                 initPage: false,
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+            Center(child: viewerButton(context)),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.004),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -248,6 +252,50 @@ class _EncrypterPageState extends State<EncrypterPage> {
       unix += String.fromCharCode(int.parse(sub, radix: 2));
     }
     return unix;
+  }
+
+  Widget viewerButton(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          side: BorderSide(
+        color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan,
+        width: 2,
+      )),
+      onPressed: () {
+        if (!EncrypterPage.running) {
+          return;
+        }
+        // DialogManager.openInfoDialog(
+        //     details: "Not implemented yet!", context: context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) => CipherPage(
+                      ascii: ascii.text,
+                      generationCount: widget.generationCount,
+                    ))));
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.02,
+          ),
+          Icon(
+            Icons.visibility_outlined,
+            color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.04,
+          ),
+          Text(
+            "Encryption Demo",
+            style: TextStyle(
+                color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan),
+          ),
+        ],
+      ),
+    );
   }
 }
 

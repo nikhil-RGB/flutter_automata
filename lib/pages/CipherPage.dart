@@ -27,6 +27,22 @@ class _CipherPageState extends State<CipherPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           // resizeToAvoidBottomInset: false,
+          extendBodyBehindAppBar: true,
+
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            leading: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_outlined),
+                color: Colors.cyan,
+              ),
+            ),
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Column(

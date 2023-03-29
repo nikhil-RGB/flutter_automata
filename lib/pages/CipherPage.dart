@@ -327,7 +327,12 @@ class _CipherPageState extends State<CipherPage> {
             color: Colors.cyan,
             width: 2,
           )),
-          onPressed: () {},
+          onPressed: () {
+            DialogManager.showEncryptionInfo(
+                context: context,
+                key: widget.secKey.base64,
+                iv: widget.genIv.base64);
+          },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

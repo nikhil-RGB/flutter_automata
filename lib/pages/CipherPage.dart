@@ -3,9 +3,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:encrypt/encrypt.dart' as enc;
+import 'package:crypto/crypto.dart';
 
 class CipherPage extends StatefulWidget {
   static List<String> modes = ["Cipher", "Decipher"];
+  static String info = "This demo includes only a Simple Cipher, rather than";
   String ascii;
   int generationCount;
   CipherPage({
@@ -22,6 +25,29 @@ class _CipherPageState extends State<CipherPage> {
   String _currentMode = "Cipher";
   TextEditingController input = TextEditingController();
   TextEditingController output = TextEditingController();
+
+  enc.Key key = enc.Key.fromSecureRandom(16);
+  enc.IV iv = enc.IV.fromSecureRandom(16);
+
+  @override
+  void initState() {
+    super.initState();
+    String keySource = widget.ascii.substring(0, (widget.ascii.length) ~/ 2);
+    String initializationVectorSource =
+        widget.ascii.substring((widget.ascii.length) ~/ 2);
+    // Convert the ascii string obtained from the first page  to bytes
+    List<int> bytes = utf8.encode(keySource);
+    // Generate a 128-bit AES key from the bytes using SHA-256
+    List<int> keyBytes = sha256.convert(bytes).bytes.sublist(0, 16);
+    // Convert the key bytes to a string
+    key = enc.Key.fromBase64(base64.encode(keyBytes));
+
+    List<int> bytesIV = utf8.encode(initializationVectorSource);
+    List<int> ivBytes = sha256.convert(bytesIV).bytes.sublist(0, 16);
+
+    iv = enc.IV.fromBase64(base64.encode(ivBytes));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -181,7 +207,7 @@ class _CipherPageState extends State<CipherPage> {
           if (input.text.isEmpty) {
             return;
           }
-          String result = doOperation(_currentMode == "Cipher");
+          String result = doEncryptOperation(_currentMode == "Cipher");
           setState(() {
             output.text = result;
           });
@@ -263,5 +289,18 @@ class _CipherPageState extends State<CipherPage> {
       }
     }
     return output;
+  }
+
+  String doEncryptOperation(bool mode) {
+    enc.Encrypter encrypter = enc.Encrypter(enc.AES(key));
+    String result = "";
+    if (mode) {
+      result = encrypter.encrypt(input.text, iv: iv).base64;
+    } else {
+      result = encrypter
+          .decrypt(enc.Encrypted.fromBase64(input.text), iv: iv)
+          .toString();
+    }
+    return result;
   }
 }

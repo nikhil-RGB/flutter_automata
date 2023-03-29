@@ -78,9 +78,9 @@ class _EncrypterPageState extends State<EncrypterPage> {
             generateToolBar(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             infoField(txtc: secKey, label: "Secret Key(base 64)"),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             infoField(txtc: genIv, label: "Initialization Vector(base 64)"),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             Expanded(
               flex: 8,
               child: CellGrid(
@@ -212,8 +212,8 @@ class _EncrypterPageState extends State<EncrypterPage> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.80,
         child: TextField(
-            minLines: 3,
-            maxLines: 5,
+            minLines: 1,
+            maxLines: 3,
             readOnly: true,
             style: GoogleFonts.sourceCodePro(color: Colors.cyan),
             controller: txtc,

@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:crypto/crypto.dart';
 
 class CipherPage extends StatefulWidget {
   static List<String> modes = ["Cipher", "Decipher"];
-  static String info = "This demo includes only a Simple Cipher, rather than";
+
   enc.Key secKey;
   enc.IV genIv;
   int generationCount;
@@ -31,59 +32,58 @@ class _CipherPageState extends State<CipherPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        constraints: const BoxConstraints.expand(),
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/background.png"),
-                fit: BoxFit.cover)),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          // resizeToAvoidBottomInset: false,
-          extendBodyBehindAppBar: true,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        // resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
 
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back_outlined),
-                color: Colors.cyan,
-              ),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_outlined),
+              color: Colors.cyan,
             ),
           ),
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.15,
-                  // ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.02,
-                  ),
-                  modeController(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateTextField(context: context, control: input),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateControlButton(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateTextField(context: context, control: output),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.015,
-                  ),
-                ],
-              ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: generationLabel(),
+            ),
+          ],
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // SizedBox(
+                //   height: MediaQuery.of(context).size.width * 0.15,
+                // ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.02,
+                ),
+                modeController(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateTextField(context: context, control: input),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateControlButton(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateTextField(context: context, control: output),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.015,
+                ),
+              ],
             ),
           ),
         ),
@@ -127,6 +127,7 @@ class _CipherPageState extends State<CipherPage> {
                 ),
           enabledBorder: createInputBorder(),
           hintText: "Enter text here",
+          hintStyle: const TextStyle(color: Colors.cyan),
           focusedBorder: createFocusBorder(),
         ),
       ),
@@ -275,13 +276,34 @@ class _CipherPageState extends State<CipherPage> {
   String doEncryptOperation(bool mode) {
     enc.Encrypter encrypter = enc.Encrypter(enc.AES(widget.secKey));
     String result = "";
-    if (mode) {
-      result = encrypter.encrypt(input.text, iv: widget.genIv).base64;
-    } else {
-      result = encrypter
-          .decrypt(enc.Encrypted.fromBase64(input.text), iv: widget.genIv)
-          .toString();
+    try {
+      if (mode) {
+        result = encrypter.encrypt(input.text, iv: widget.genIv).base64;
+      } else {
+        result = encrypter
+            .decrypt(enc.Encrypted.fromBase64(input.text), iv: widget.genIv)
+            .toString();
+      }
+    } on Exception catch (e) {
+      DialogManager.openInfoDialog(
+          details: "Error performing operation!", context: context);
     }
     return result;
+  }
+
+  Widget generationLabel() {
+    String lab = "";
+    int gc = widget.generationCount;
+    lab = gc.toString();
+    if (gc < 10) {
+      lab = "0$lab";
+    }
+    return Text(
+      "Generation Count: ${widget.generationCount}",
+      style: const TextStyle(
+        color: Colors.cyan,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 }

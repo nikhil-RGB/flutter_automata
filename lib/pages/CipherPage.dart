@@ -9,11 +9,13 @@ import 'package:crypto/crypto.dart';
 class CipherPage extends StatefulWidget {
   static List<String> modes = ["Cipher", "Decipher"];
   static String info = "This demo includes only a Simple Cipher, rather than";
-  String ascii;
+  enc.Key secKey;
+  enc.IV genIv;
   int generationCount;
   CipherPage({
     super.key,
-    required this.ascii,
+    required this.secKey,
+    required this.genIv,
     required this.generationCount,
   });
 
@@ -25,28 +27,6 @@ class _CipherPageState extends State<CipherPage> {
   String _currentMode = "Cipher";
   TextEditingController input = TextEditingController();
   TextEditingController output = TextEditingController();
-
-  enc.Key key = enc.Key.fromSecureRandom(16);
-  enc.IV iv = enc.IV.fromSecureRandom(16);
-
-  @override
-  void initState() {
-    super.initState();
-    String keySource = widget.ascii.substring(0, (widget.ascii.length) ~/ 2);
-    String initializationVectorSource =
-        widget.ascii.substring((widget.ascii.length) ~/ 2);
-    // Convert the ascii string obtained from the first page  to bytes
-    List<int> bytes = utf8.encode(keySource);
-    // Generate a 128-bit AES key from the bytes using SHA-256
-    List<int> keyBytes = sha256.convert(bytes).bytes.sublist(0, 16);
-    // Convert the key bytes to a string
-    key = enc.Key.fromBase64(base64.encode(keyBytes));
-
-    List<int> bytesIV = utf8.encode(initializationVectorSource);
-    List<int> ivBytes = sha256.convert(bytesIV).bytes.sublist(0, 16);
-
-    iv = enc.IV.fromBase64(base64.encode(ivBytes));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,8 +177,8 @@ class _CipherPageState extends State<CipherPage> {
             ),
             Text(
               (_currentMode == "Cipher")
-                  ? "Automata Cipher"
-                  : "Automata Decipher",
+                  ? "Automata AES Encrypt"
+                  : "Automata AES Decrypt",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -272,33 +252,34 @@ class _CipherPageState extends State<CipherPage> {
   }
 
   // true for cipher/false for decipher
-  String doOperation(bool mode) {
-    String inp = input.text;
-    String output = "";
-    for (int i = 0, j = 0; i < inp.length; ++i) {
-      if (mode) {
-        output +=
-            String.fromCharCode(inp.codeUnitAt(i) + widget.ascii.codeUnitAt(j));
-      } else {
-        output +=
-            String.fromCharCode(inp.codeUnitAt(i) - widget.ascii.codeUnitAt(j));
-      }
-      ++j;
-      if (j >= widget.ascii.length) {
-        j = 0;
-      }
-    }
-    return output;
-  }
+  // String doOperation(bool mode) {
+  //   String inp = input.text;
+  //   String output = "";
+  //   for (int i = 0, j = 0; i < inp.length; ++i) {
+  //     if (mode) {
+  //       output +=
+  //           String.fromCharCode(inp.codeUnitAt(i) + widget.ascii.codeUnitAt(j));
+  //     } else {
+  //       output +=
+  //           String.fromCharCode(inp.codeUnitAt(i) - widget.ascii.codeUnitAt(j));
+  //     }
+  //     ++j;
+  //     if (j >= widget.ascii.length) {
+  //       j = 0;
+  //     }
+  //   }
+  //   return output;
+  // }
 
+  //Pass true for encryption, false for decryption
   String doEncryptOperation(bool mode) {
-    enc.Encrypter encrypter = enc.Encrypter(enc.AES(key));
+    enc.Encrypter encrypter = enc.Encrypter(enc.AES(widget.secKey));
     String result = "";
     if (mode) {
-      result = encrypter.encrypt(input.text, iv: iv).base64;
+      result = encrypter.encrypt(input.text, iv: widget.genIv).base64;
     } else {
       result = encrypter
-          .decrypt(enc.Encrypted.fromBase64(input.text), iv: iv)
+          .decrypt(enc.Encrypted.fromBase64(input.text), iv: widget.genIv)
           .toString();
     }
     return result;

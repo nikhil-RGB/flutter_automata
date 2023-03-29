@@ -1,5 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
+import 'package:encrypt/encrypt.dart' as enc;
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
 import 'package:flutter_automata/pages/CipherPage.dart';
@@ -32,14 +35,25 @@ class EncrypterPage extends StatefulWidget {
 }
 
 class _EncrypterPageState extends State<EncrypterPage> {
-  TextEditingController binary =
+  TextEditingController secKey =
       TextEditingController(); //TextEditingController for binary
-  TextEditingController ascii =
+  TextEditingController genIv =
       TextEditingController(); //TextEditingController for ascii text area
+
+  enc.Key key = enc.Key.fromSecureRandom(10);
+  enc.IV iv = enc.IV.fromSecureRandom(10);
   @override
   Widget build(BuildContext context) {
-    binary.text = extractBinaryFromGrid();
-    ascii.text = parseUnix(binary.text);
+    String binary = extractBinaryFromGrid();
+    String ascii = parseUnix(binary);
+    List<dynamic> params = generateKeyIv(ascii);
+
+    key = params[0];
+    iv = params[1];
+
+    secKey.text = key.base64;
+    genIv.text = iv.base64;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -63,9 +77,9 @@ class _EncrypterPageState extends State<EncrypterPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             generateToolBar(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            infoField(txtc: binary, label: "Binary Text"),
+            infoField(txtc: secKey, label: "Secret Key(base 64)"),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            infoField(txtc: ascii, label: "ASCII value"),
+            infoField(txtc: genIv, label: "Initialization Vector(base 64)"),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Expanded(
               flex: 8,
@@ -254,6 +268,24 @@ class _EncrypterPageState extends State<EncrypterPage> {
     return unix;
   }
 
+  //generates a symmetric encryption key and
+  List<dynamic> generateKeyIv(String ascii) {
+    String keySource = ascii.substring(0, (ascii.length) ~/ 2);
+    String initializationVectorSource = ascii.substring((ascii.length) ~/ 2);
+    // Convert the ascii string obtained from the first page  to bytes
+    List<int> bytes = utf8.encode(keySource);
+    // Generate a 128-bit AES key from the bytes using SHA-256
+    List<int> keyBytes = sha256.convert(bytes).bytes.sublist(0, 16);
+    // Convert the key bytes to a string
+    enc.Key key = enc.Key.fromBase64(base64.encode(keyBytes));
+
+    List<int> bytesIV = utf8.encode(initializationVectorSource);
+    List<int> ivBytes = sha256.convert(bytesIV).bytes.sublist(0, 16);
+
+    enc.IV iv = enc.IV.fromBase64(base64.encode(ivBytes));
+    return [key, iv];
+  }
+
   Widget viewerButton(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
@@ -271,7 +303,8 @@ class _EncrypterPageState extends State<EncrypterPage> {
             context,
             MaterialPageRoute(
                 builder: ((context) => CipherPage(
-                      ascii: ascii.text,
+                      secKey: key,
+                      genIv: iv,
                       generationCount: widget.generationCount,
                     ))));
       },
@@ -289,7 +322,7 @@ class _EncrypterPageState extends State<EncrypterPage> {
             width: MediaQuery.of(context).size.width * 0.04,
           ),
           Text(
-            "Encryption Demo",
+            "AES Encryption Demo",
             style: TextStyle(
                 color: (!EncrypterPage.running) ? Colors.grey : Colors.cyan),
           ),

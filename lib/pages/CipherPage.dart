@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
@@ -31,32 +33,35 @@ class _CipherPageState extends State<CipherPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyBoardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
         // resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
 
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_outlined),
-              color: Colors.cyan,
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: generationLabel(),
-            ),
-          ],
-        ),
+        appBar: (!isKeyBoardOpen)
+            ? AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                leading: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_outlined),
+                    color: Colors.cyan,
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: generationLabel(),
+                  ),
+                ],
+              )
+            : null,
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -67,7 +72,13 @@ class _CipherPageState extends State<CipherPage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.02,
                 ),
-                modeController(),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    modeController(),
+                    generateInfoButton(),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.01,
                 ),
@@ -304,6 +315,35 @@ class _CipherPageState extends State<CipherPage> {
         color: Colors.cyan,
         fontWeight: FontWeight.bold,
       ),
+    );
+  }
+
+  Widget generateInfoButton() {
+    return Container(
+      margin: EdgeInsets.only(left: 15.0, right: 8.0),
+      child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              side: BorderSide(
+            color: Colors.cyan,
+            width: 2,
+          )),
+          onPressed: () {},
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.view_agenda_outlined,
+                color: Colors.cyan,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Text(
+                "View key/IV data",
+                style: TextStyle(color: Colors.cyan),
+              ),
+            ],
+          )),
     );
   }
 }

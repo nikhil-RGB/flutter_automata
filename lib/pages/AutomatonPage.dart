@@ -284,7 +284,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
           //   width: MediaQuery.of(context).size.width * 0.4,
           // )
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.08,
+            width: MediaQuery.of(context).size.width * 0.04,
           ),
           _ruleInfo(),
         ],
@@ -319,7 +319,7 @@ class _AutomatonPageState extends State<AutomatonPage> {
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-      width: MediaQuery.of(context).size.width * 0.35,
+      width: MediaQuery.of(context).size.width * 0.33,
       decoration: BoxDecoration(
         border: Border.all(
             width: 2,

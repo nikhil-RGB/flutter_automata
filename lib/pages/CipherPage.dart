@@ -1,16 +1,24 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_automata/util/DialogManager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:encrypt/encrypt.dart' as enc;
+import 'package:crypto/crypto.dart';
 
 class CipherPage extends StatefulWidget {
   static List<String> modes = ["Cipher", "Decipher"];
-  String ascii;
+
+  enc.Key secKey;
+  enc.IV genIv;
   int generationCount;
   CipherPage({
     super.key,
-    required this.ascii,
+    required this.secKey,
+    required this.genIv,
     required this.generationCount,
   });
 
@@ -22,62 +30,71 @@ class _CipherPageState extends State<CipherPage> {
   String _currentMode = "Cipher";
   TextEditingController input = TextEditingController();
   TextEditingController output = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final isKeyBoardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return SafeArea(
-      child: Container(
-        constraints: const BoxConstraints.expand(),
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/background.png"),
-                fit: BoxFit.cover)),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          // resizeToAvoidBottomInset: false,
-          extendBodyBehindAppBar: true,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        // resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
 
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back_outlined),
-                color: Colors.cyan,
-              ),
-            ),
-          ),
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.15,
-                  // ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.02,
+        appBar: (!isKeyBoardOpen)
+            ? AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                leading: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_outlined),
+                    color: Colors.cyan,
                   ),
-                  modeController(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateTextField(context: context, control: input),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateControlButton(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  generateTextField(context: context, control: output),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.015,
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: generationLabel(),
                   ),
                 ],
-              ),
+              )
+            : null,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // SizedBox(
+                //   height: MediaQuery.of(context).size.width * 0.15,
+                // ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.02,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    modeController(),
+                    generateInfoButton(),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateTextField(context: context, control: input),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateControlButton(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.01,
+                ),
+                generateTextField(context: context, control: output),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.015,
+                ),
+              ],
             ),
           ),
         ),
@@ -121,6 +138,7 @@ class _CipherPageState extends State<CipherPage> {
                 ),
           enabledBorder: createInputBorder(),
           hintText: "Enter text here",
+          hintStyle: const TextStyle(color: Colors.cyan),
           focusedBorder: createFocusBorder(),
         ),
       ),
@@ -171,8 +189,8 @@ class _CipherPageState extends State<CipherPage> {
             ),
             Text(
               (_currentMode == "Cipher")
-                  ? "Automata Cipher"
-                  : "Automata Decipher",
+                  ? "Automata AES Encrypt"
+                  : "Automata AES Decrypt",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -181,7 +199,7 @@ class _CipherPageState extends State<CipherPage> {
           if (input.text.isEmpty) {
             return;
           }
-          String result = doOperation(_currentMode == "Cipher");
+          String result = doEncryptOperation(_currentMode == "Cipher");
           setState(() {
             output.text = result;
           });
@@ -246,22 +264,93 @@ class _CipherPageState extends State<CipherPage> {
   }
 
   // true for cipher/false for decipher
-  String doOperation(bool mode) {
-    String inp = input.text;
-    String output = "";
-    for (int i = 0, j = 0; i < inp.length; ++i) {
+  // String doOperation(bool mode) {
+  //   String inp = input.text;
+  //   String output = "";
+  //   for (int i = 0, j = 0; i < inp.length; ++i) {
+  //     if (mode) {
+  //       output +=
+  //           String.fromCharCode(inp.codeUnitAt(i) + widget.ascii.codeUnitAt(j));
+  //     } else {
+  //       output +=
+  //           String.fromCharCode(inp.codeUnitAt(i) - widget.ascii.codeUnitAt(j));
+  //     }
+  //     ++j;
+  //     if (j >= widget.ascii.length) {
+  //       j = 0;
+  //     }
+  //   }
+  //   return output;
+  // }
+
+  //Pass true for encryption, false for decryption
+  String doEncryptOperation(bool mode) {
+    enc.Encrypter encrypter = enc.Encrypter(enc.AES(widget.secKey));
+    String result = "";
+    try {
       if (mode) {
-        output +=
-            String.fromCharCode(inp.codeUnitAt(i) + widget.ascii.codeUnitAt(j));
+        result = encrypter.encrypt(input.text, iv: widget.genIv).base64;
       } else {
-        output +=
-            String.fromCharCode(inp.codeUnitAt(i) - widget.ascii.codeUnitAt(j));
+        result = encrypter
+            .decrypt(enc.Encrypted.fromBase64(input.text), iv: widget.genIv)
+            .toString();
       }
-      ++j;
-      if (j >= widget.ascii.length) {
-        j = 0;
-      }
+    } catch (e) {
+      DialogManager.openInfoDialog(
+          details:
+              "Error performing operation!\nIt is possible you progressed the automaton, thereby changing the secure key and IV being used to encrypt/decrypt the messages!",
+          context: context);
     }
-    return output;
+    return result;
+  }
+
+  Widget generationLabel() {
+    String lab = "";
+    int gc = widget.generationCount;
+    lab = gc.toString();
+    if (gc < 10) {
+      lab = "0$lab";
+    }
+    return Text(
+      "Generation Count: ${widget.generationCount}",
+      style: const TextStyle(
+        color: Colors.cyan,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget generateInfoButton() {
+    return Container(
+      margin: EdgeInsets.only(left: 15.0, right: 8.0),
+      child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              side: BorderSide(
+            color: Colors.cyan,
+            width: 2,
+          )),
+          onPressed: () {
+            DialogManager.showEncryptionInfo(
+                context: context,
+                key: widget.secKey.base64,
+                iv: widget.genIv.base64);
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.view_agenda_outlined,
+                color: Colors.cyan,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Text(
+                "View key/IV data",
+                style: TextStyle(color: Colors.cyan),
+              ),
+            ],
+          )),
+    );
   }
 }

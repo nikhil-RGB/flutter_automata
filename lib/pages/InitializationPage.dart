@@ -118,7 +118,7 @@ class _InitializationPageState extends State<InitializationPage> {
               PopupMenuItem(
                   value: 4,
                   child: Text(
-                    "Simulate Encryption Keys[BETA]",
+                    "Generate Encryption Keys[EXPERIMENTAL]",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
               PopupMenuItem(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_automata/pages/InfoPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DialogManager {
@@ -685,5 +686,103 @@ class DialogManager {
             ],
           );
         });
+  }
+
+  static Future showEncryptionInfo({
+    required BuildContext context,
+    String title = "Encrypter Details",
+    required String key,
+    required String iv,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color(0XFF004246),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            infoField(context: context, value: key, label: "Key(base 64)"),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            infoField(
+                context: context,
+                value: iv,
+                label: "Initialization Vector(base 64)"),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            infoField(
+                context: context,
+                value: "Advanced Encryption Standard(AES)",
+                label: "Algorithm"),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.04,
+            ),
+            const Text(
+              "The key and IV were created using the current state of the cellular automaton and hashed via SHA-256. To change the key and IV, go back to the previous page and progress the automaton's state.",
+              style: TextStyle(color: Colors.cyan),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const InfoPage())));
+            },
+            child: Text("More Info", style: GoogleFonts.sourceCodePro()),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Ok", style: GoogleFonts.sourceCodePro()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget infoField(
+      {required BuildContext context,
+      required String value,
+      required String label}) {
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.80,
+        child: TextField(
+            controller: TextEditingController(text: value),
+            minLines: 1,
+            maxLines: 3,
+            readOnly: true,
+            style: GoogleFonts.sourceCodePro(color: Colors.cyan),
+            decoration: InputDecoration(
+              labelText: label,
+              alignLabelWithHint: true,
+              labelStyle: GoogleFonts.sourceCodePro(
+                  fontSize: 15,
+                  color: Colors.cyan,
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w400),
+              floatingLabelStyle: GoogleFonts.sourceCodePro(color: Colors.cyan),
+              hintStyle:
+                  GoogleFonts.sourceCodePro(color: Colors.cyan, fontSize: 14),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3, color: Colors.cyan),
+                  borderRadius: BorderRadius.circular(12.0)),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    width: 3, color: Colors.teal), //<-- SEE HERE
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            )),
+      ),
+    );
   }
 }

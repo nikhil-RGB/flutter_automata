@@ -147,7 +147,8 @@ class _AutomatonPageState extends State<AutomatonPage> {
     }
     return Text(
       "Generation Count: ${widget.generationCount}",
-      style: const TextStyle(color: Colors.cyan),
+      style:
+          TextStyle(color: (AutomatonPage.running) ? Colors.cyan : Colors.grey),
     );
   }
 
@@ -184,96 +185,110 @@ class _AutomatonPageState extends State<AutomatonPage> {
   }
 
   Widget generateFunctionalities() {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                  color: (AutomatonPage.automate || (!AutomatonPage.running))
-                      ? Colors.grey
-                      : Colors.cyan,
-                  width: 2,
-                )),
-                onPressed: () {
-                  if (AutomatonPage.automate || (!AutomatonPage.running)) {
-                    return;
-                  }
-                  setState(() {
-                    AutomatonPage.running = false;
-                  });
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.delete_forever_outlined,
-                      color:
-                          (AutomatonPage.automate || (!AutomatonPage.running))
-                              ? Colors.grey
-                              : Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.01,
-                    ),
-                    Text(
-                      "FORCE KILL SYSTEM",
-                      style: TextStyle(
+    return Padding(
+      padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                    color: (AutomatonPage.automate || (!AutomatonPage.running))
+                        ? Colors.grey
+                        : Colors.cyan,
+                    width: 2,
+                  )),
+                  onPressed: () {
+                    if (AutomatonPage.automate || (!AutomatonPage.running)) {
+                      return;
+                    }
+                    setState(() {
+                      AutomatonPage.running = false;
+                    });
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.delete_forever_outlined,
                         color:
                             (AutomatonPage.automate || (!AutomatonPage.running))
                                 ? Colors.grey
                                 : Colors.cyan,
                       ),
-                    ),
-                  ],
-                )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.008,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Checkbox(
-                    fillColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled) ||
-                          !AutomatonPage.running) {
-                        return Colors.cyan.withOpacity(.32);
-                      }
-                      return Colors.cyan;
-                    }),
-                    activeColor: Colors.tealAccent,
-                    checkColor: Colors.white,
-                    value: AutomatonPage.automate,
-                    onChanged: (value) {
-                      if (!AutomatonPage.running) {
-                        return;
-                      }
-                      setState(() {
-                        AutomatonPage.automate = value!;
-                      });
-                      if (AutomatonPage.automate) {
-                        automateCalculation();
-                      }
-                    }),
-                // SizedBox(
-                //   width: MediaQuery.of(context).size.width * 0.01,
-                // ),
-                const Text(
-                  "Automate progression",
-                  style: TextStyle(color: Colors.cyan),
-                ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-        )
-      ],
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.01,
+                      ),
+                      Text(
+                        "FORCE KILL SYSTEM",
+                        style: TextStyle(
+                          color: (AutomatonPage.automate ||
+                                  (!AutomatonPage.running))
+                              ? Colors.grey
+                              : Colors.cyan,
+                        ),
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.014,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: Checkbox(
+                        fillColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled) ||
+                              !AutomatonPage.running) {
+                            return Colors.grey;
+                          }
+                          return Colors.cyan;
+                        }),
+                        activeColor: Colors.tealAccent,
+                        checkColor: Colors.white,
+                        value: AutomatonPage.automate,
+                        onChanged: (value) {
+                          if (!AutomatonPage.running) {
+                            return;
+                          }
+                          setState(() {
+                            AutomatonPage.automate = value!;
+                          });
+                          if (AutomatonPage.automate) {
+                            automateCalculation();
+                          }
+                        }),
+                  ),
+                  // SizedBox(
+                  //   width: MediaQuery.of(context).size.width * 0.01,
+                  // ),
+                  Text(
+                    " Automate progression",
+                    style: TextStyle(
+                        color: (AutomatonPage.running)
+                            ? Colors.cyan
+                            : Colors.grey),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width * 0.4,
+          // )
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.08,
+          ),
+          _ruleInfo(),
+        ],
+      ),
     );
   }
 
@@ -298,5 +313,60 @@ class _AutomatonPageState extends State<AutomatonPage> {
         }
       });
     }
+  }
+
+  Widget _ruleInfo() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+      width: MediaQuery.of(context).size.width * 0.35,
+      decoration: BoxDecoration(
+        border: Border.all(
+            width: 2,
+            color: (AutomatonPage.running) ? Colors.cyan : Colors.grey),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.001,
+          ),
+          Text(
+            "Lower Bound: ${widget.lb}",
+            style: TextStyle(
+                color: (AutomatonPage.running) ? Colors.cyan : Colors.grey),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
+          ),
+          Text(
+            "Upper Bound: ${widget.ub}",
+            style: TextStyle(
+                color: (AutomatonPage.running) ? Colors.cyan : Colors.grey),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
+          ),
+          Text(
+            "Ress Bound:  ${widget.ress}",
+            style: TextStyle(
+                color: (AutomatonPage.running) ? Colors.cyan : Colors.grey),
+          ),
+          // SizedBox(
+          //   height: MediaQuery.of(context).size.height * 0.01,
+          // ),
+          // Text(
+          //   "time gap(ms): ${widget.timeGap}",
+          //   style: const TextStyle(color: Colors.cyan),
+          // ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.001,
+          ),
+        ],
+      ),
+    );
   }
 }

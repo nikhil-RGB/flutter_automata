@@ -40,8 +40,38 @@ In all other cases, a cell dies or remains dead.
 These simple rules can generate patterns ranging from simple oscillators to complex shapes that evolve over time. The Game of Life is often used as an example of cellular automata and is widely studied by mathematicians, computer scientists, and other researchers interested in complex systems and emergent behavior.
 
 > **Note**
-> ### This project is continually being developed, and may have multiple bugs/issues and janky performance under certain conditions
-> ### The performance of the app will undergo heavy optimization in the coming releases!
+> ### This project is continually being developed, and may have multiple bugs/issues and janky performance under certain conditions. The performance of the app will      undergo heavy optimization in the coming releases!
 
+### Experimental Feature- Symmetric Encryption Key/IV generation:
 
+Given the nature of cellular automaton and the way it progresses through multiple finite states, it can be used for generating pseudorandom numbers/strings which may serve the purpose of secret encryption keys.
+Symmetric key generation refers to the process of generating a secret key that can be used to encrypt and decrypt data in a secure way. 
+In this approach, the CA is initialized with a random initial state, and then the rules are applied iteratively to generate a sequence of states. The sequence of states is then converted into a sequence of numbers that can be used as a secret key.
+The advantage of using CA for symmetric key generation is that the resulting sequence of numbers is highly random and unpredictable, which makes it very difficult for an attacker to guess the key. Additionally, the CA can be easily configured to produce keys of different lengths, which makes it suitable for a wide range of cryptographic applications.
+
+#### Specefics:
+
+Here are the specefic implementation details for this experimental feature:
+
+- These encryption keys are generated using the current state of the Cellular Automaton :
+    - At the time of key generation, the current state/generation of the cellular automaton is converted into a binary string--> 1 for alive/0 for 
+      dead.
+    - This binary string is then divided into substrings of 12, and each substring is converted into it's decimal equivalent number.
+    - These numbers are then each encoded into a character. A string of jargon characters is thus generated. This string is then split into two 
+       halves which are used to generate the secret key, and initialization vector.
+    - Each of these two halves then undergo UTF-8 encoding and SHA-256 hashing.
+    - The first 16 bytes of the two halves are then converted into the key and IV respectively.
+    
+- The algorithm used to test the symmetric key so-generated is AES(Advanced Encryption Standard). I used the 
+   [encrypter](https://pub.dev/packages/encrypt) package for implementing the AES algorithm, since my purpose was only to showcase **key 
+   generation**, not re-implement any encryption algorithm itself.
+
+<div align="center">
+
+<img width="230" alt="screen1" align="left" src="https://user-images.githubusercontent.com/68727041/229349865-6a564e8d-8e42-430e-8cf3-105026161dbd.jpeg">
+
+<img width="230" alt="screen2" align="center" src="https://user-images.githubusercontent.com/68727041/229349875-eb4eca1c-44a7-434c-98e2-d4226a2c1b65.jpeg">
+
+<img width="230" alt="screen3" align="right" src="https://user-images.githubusercontent.com/68727041/229349879-c0cfc8ec-18fe-48ef-8b52-56e3cb5835c7.jpeg">
+</div>
 

@@ -295,9 +295,11 @@ class _CipherPageState extends State<CipherPage> {
             .decrypt(enc.Encrypted.fromBase64(input.text), iv: widget.genIv)
             .toString();
       }
-    } on Exception catch (e) {
+    } catch (e) {
       DialogManager.openInfoDialog(
-          details: "Error performing operation!", context: context);
+          details:
+              "Error performing operation!\nIt is possible you progressed the automaton, thereby changing the secure key and IV being used to encrypt/decrypt the messages!",
+          context: context);
     }
     return result;
   }

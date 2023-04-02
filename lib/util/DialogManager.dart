@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_automata/pages/InfoPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DialogManager {
@@ -732,7 +733,8 @@ class DialogManager {
         actions: [
           ElevatedButton(
             onPressed: () {
-              //Navigate to more info  page.
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const InfoPage())));
             },
             child: Text("More Info", style: GoogleFonts.sourceCodePro()),
           ),

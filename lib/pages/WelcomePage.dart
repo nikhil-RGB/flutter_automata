@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_automata/pages/InitializationPage.dart';
 import 'package:flutter_automata/util/DialogManager.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WelcomePage extends StatelessWidget {
   static const int minRows = 2;
@@ -14,8 +15,16 @@ class WelcomePage extends StatelessWidget {
   int ub;
   int lb;
   int ress;
-  static const String welcomeMessage =
-      "Welcome to the Flutter Automata !\n\n\n\nA cellular automaton (CA) is a collection of cells arranged in a grid of specified shape, such that each cell changes state as a function of time, according to a defined set of rules driven by the states of neighboring cells.\n\nHere, you can create your own system of living cells with your own set of rules!";
+  // static const String welcomeMessage =
+  //     "Welcome to Game of Life !\n\n\nA Cellular Automaton (CA) is a collection of cells arranged in a grid of specified shape, such that each cell changes state as a function of time, according to a defined set of rules driven by the states of neighboring cells.\n\nGame of Life is a particular kind of cellular automaton, introduced by John Connway in 1970, consisting of 2-state cells(dead or alive).\n\nThese automatons form self-generative patterns, and have applications in fields like cryptography and traffic simulation. \nHere, you can create your own system of living cells with your own set of rules!";
+  static const String mssg1 = "Welcome to Game of Life !\n\n\nA ";
+  static const String hyperlink1 = "Cellular Automaton";
+  static const String mssg2 =
+      " (CA) is a collection of cells arranged in a grid of specified shape, such that each cell changes state as a function of time, according to a defined set of rules driven by the states of neighboring cells.\n\n";
+  static const String hyperlink2 = "Game of Life";
+  static const String mssg3 =
+      " is a particular kind of cellular automaton, introduced by John Connway in 1970, consisting of 2-state cells(dead or alive).\n\nThese automatons form self-generative patterns, and have applications in fields like cryptography and traffic simulation. \n\nHere, you can create your own system of living cells with your own set of rules!";
+
   WelcomePage(
       {super.key,
       required this.x,
@@ -29,7 +38,9 @@ class WelcomePage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
+          elevation: 0,
           backgroundColor: Colors.transparent,
           leading: Padding(
             padding: const EdgeInsets.only(top: 10.0, left: 12.0),
@@ -45,16 +56,69 @@ class WelcomePage extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                welcomeMessage,
-                style: TextStyle(color: Colors.cyan, fontSize: 17),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            Padding(
+                padding: const EdgeInsets.only(right: 7, left: 7),
+                // child: Text(
+                //   welcomeMessage,
+                //   style: TextStyle(color: Colors.cyan, fontSize: 17),
+                //   textAlign: TextAlign.center,
+                // ),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: mssg1,
+                        style: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan,
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextSpan(
+                        text: hyperlink1,
+                        style: GoogleFonts.sourceCodePro(
+                          color: Colors.transparent,
+                          shadows: [
+                            const Shadow(
+                                offset: Offset(0, -1), color: Colors.cyanAccent)
+                          ],
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.cyanAccent,
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextSpan(
+                        text: mssg2,
+                        style: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan,
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextSpan(
+                        text: hyperlink2,
+                        style: GoogleFonts.sourceCodePro(
+                          decoration: TextDecoration.underline,
+                          color: Colors.transparent,
+                          shadows: [
+                            const Shadow(
+                                offset: Offset(0, -1), color: Colors.cyanAccent)
+                          ],
+                          decorationColor: Colors.cyanAccent,
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextSpan(
+                        text: mssg3,
+                        style: GoogleFonts.sourceCodePro(
+                          color: Colors.cyan,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.071,
             ),
             ElevatedButton(
               onPressed: () async {
@@ -78,7 +142,7 @@ class WelcomePage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
               child: const Text("Proceed"),
-            )
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_automata/CellGrid.dart';
+import 'package:flutter_automata/pages/AboutUs.dart';
 import 'package:flutter_automata/pages/AutomatonPage.dart';
 import 'package:flutter_automata/pages/EncrypterPage.dart';
 import 'package:flutter_automata/util/DialogManager.dart';
@@ -122,6 +123,12 @@ class _InitializationPageState extends State<InitializationPage> {
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
               PopupMenuItem(
+                  value: 5,
+                  child: Text(
+                    "About us",
+                    style: GoogleFonts.sourceCodePro(color: Colors.white),
+                  )),
+              PopupMenuItem(
                   value: 3,
                   child: Text(
                     "Exit Interface",
@@ -181,6 +188,12 @@ class _InitializationPageState extends State<InitializationPage> {
                             ub: widget.ub,
                             lb: widget.lb,
                             ress: widget.ress))));
+              }
+              break;
+            case 5:
+              {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => AboutUs())));
               }
               break;
           }

@@ -8,6 +8,8 @@ const String devLink = "https://linktr.ee/nikhil_n67";
 const String designerLink = "https://linktr.ee/chandramasaha";
 const String devLinkedin = "https://www.linkedin.com/in/nikhil-narayanan-rgb/";
 const String designerLinkedin = "https://www.linkedin.com/in/chandramasaha/";
+const String devTagLine = "\"Sir, that's a feature, not a bug\"\n(He's lying)";
+const String designerTagLine = "\"Making pixels pretty with purpose\"";
 
 class AboutUs extends StatelessWidget {
   const AboutUs({super.key});
@@ -62,101 +64,116 @@ class AboutUs extends StatelessWidget {
     double imgHeight = imgWidth;
     return Container(
       padding: const EdgeInsets.only(
-        top: 50,
-        bottom: 50,
-        right: 25,
-        left: 25,
+        top: 35,
+        bottom: 35,
+        right: 15,
+        left: 15,
       ),
-      margin: const EdgeInsets.all(5.0),
+      margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         color: const Color(0xFF161616),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            clipBehavior: Clip.none,
-            fit: StackFit.loose,
+          Row(
             children: [
               Container(
-                height: imgHeight,
-                width: imgWidth,
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Colors.cyan,
-                      width: 1.0,
-                    )),
-              ),
-              Positioned(
-                bottom: 9,
-                right: 9,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.cyan, width: 1.0),
-                  ),
-                  width: imgWidth,
-                  height: imgHeight,
-                  child: const Image(
-                      image: AssetImage("assets/images/nikhil.png")),
+                margin: const EdgeInsets.only(left: 10),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  fit: StackFit.loose,
+                  children: [
+                    Container(
+                      height: imgHeight,
+                      width: imgWidth,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colors.cyan,
+                            width: 1.0,
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 9,
+                      right: 9,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.cyan, width: 1.0),
+                        ),
+                        width: imgWidth,
+                        height: imgHeight,
+                        child: const Image(
+                            image: AssetImage("assets/images/nikhil.png")),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              const SizedBox(
+                width: 22,
+              ),
+              Column(
+                // mainAxisSize: MainAxisSize.min,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Nikhil Narayanan",
+                    style: TextStyle(color: Colors.cyan, fontSize: 17),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      "App Developer",
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.035,
+                  ),
+                  generateClickableLabel(
+                    "@nikhil-rgb",
+                    githubLink,
+                    const Icon(
+                      SimpleIcons.github,
+                      color: Colors.cyan,
+                      size: 18,
+                    ),
+                    context: context,
+                  ),
+                  generateClickableLabel(
+                    "@nikhil-narayanan-rgb",
+                    devLinkedin,
+                    const Icon(
+                      SimpleIcons.linkedin,
+                      color: Colors.cyan,
+                      size: 16,
+                    ),
+                    context: context,
+                  ),
+                  generateClickableLabel(
+                    "More Links",
+                    devLink,
+                    const Icon(
+                      SimpleIcons.linktree,
+                      color: Colors.cyan,
+                      size: 18,
+                    ),
+                    context: context,
+                  )
+                ],
               ),
             ],
           ),
           const SizedBox(
-            width: 22,
+            height: 25,
           ),
-          Column(
-            // mainAxisSize: MainAxisSize.min,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Nikhil Narayanan",
-                style: TextStyle(color: Colors.cyan, fontSize: 17),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  "App Developer",
-                  style: TextStyle(color: Colors.white, fontSize: 13),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.035,
-              ),
-              generateClickableLabel(
-                "@nikhil-rgb",
-                githubLink,
-                const Icon(
-                  SimpleIcons.github,
-                  color: Colors.cyan,
-                  size: 18,
-                ),
-                context: context,
-              ),
-              generateClickableLabel(
-                "@nikhil-narayanan-rgb",
-                devLinkedin,
-                const Icon(
-                  SimpleIcons.linkedin,
-                  color: Colors.cyan,
-                  size: 16,
-                ),
-                context: context,
-              ),
-              generateClickableLabel(
-                "More Links",
-                devLink,
-                const Icon(
-                  SimpleIcons.chainlink,
-                  color: Colors.cyan,
-                  size: 18,
-                ),
-                context: context,
-              )
-            ],
+          const Text(
+            devTagLine,
+            style: TextStyle(color: Colors.cyan, fontSize: 14),
           ),
         ],
       ),
@@ -193,101 +210,116 @@ class AboutUs extends StatelessWidget {
     double imgHeight = imgWidth;
     return Container(
       padding: const EdgeInsets.only(
-        top: 50,
-        bottom: 50,
-        right: 25,
-        left: 25,
+        top: 35,
+        bottom: 35,
+        right: 15,
+        left: 15,
       ),
       margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         color: const Color(0xFF161616),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            clipBehavior: Clip.none,
-            fit: StackFit.loose,
+          Row(
             children: [
               Container(
-                height: imgHeight,
-                width: imgWidth,
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Colors.cyan,
-                      width: 1.0,
-                    )),
-              ),
-              Positioned(
-                bottom: 9,
-                right: 9,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.cyan, width: 1.0),
-                  ),
-                  width: imgWidth,
-                  height: imgHeight,
-                  child: const Image(
-                      image: AssetImage("assets/images/chandrama.jpg")),
+                margin: const EdgeInsets.only(left: 10),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  fit: StackFit.loose,
+                  children: [
+                    Container(
+                      height: imgHeight,
+                      width: imgWidth,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colors.cyan,
+                            width: 1.0,
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 9,
+                      right: 9,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.cyan, width: 1.0),
+                        ),
+                        width: imgWidth,
+                        height: imgHeight,
+                        child: const Image(
+                            image: AssetImage("assets/images/chandrama.jpg")),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              const SizedBox(
+                width: 22,
+              ),
+              Column(
+                // mainAxisSize: MainAxisSize.min,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Chandrama Saha",
+                    style: TextStyle(color: Colors.cyan, fontSize: 17),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      "UI/UX designer",
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.035,
+                  ),
+                  generateClickableLabel(
+                    "@chandrama",
+                    figmaLink,
+                    const Icon(
+                      SimpleIcons.figma,
+                      color: Colors.cyan,
+                      size: 18,
+                    ),
+                    context: context,
+                  ),
+                  generateClickableLabel(
+                    "@chandramasaha",
+                    designerLinkedin,
+                    const Icon(
+                      SimpleIcons.linkedin,
+                      color: Colors.cyan,
+                      size: 16,
+                    ),
+                    context: context,
+                  ),
+                  generateClickableLabel(
+                    "More Links",
+                    designerLink,
+                    const Icon(
+                      SimpleIcons.linktree,
+                      color: Colors.cyan,
+                      size: 18,
+                    ),
+                    context: context,
+                  )
+                ],
               ),
             ],
           ),
           const SizedBox(
-            width: 22,
+            height: 25,
           ),
-          Column(
-            // mainAxisSize: MainAxisSize.min,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Chandrama",
-                style: TextStyle(color: Colors.cyan, fontSize: 17),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  "UI/UX designer",
-                  style: TextStyle(color: Colors.white, fontSize: 13),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.035,
-              ),
-              generateClickableLabel(
-                "@chandrama",
-                figmaLink,
-                const Icon(
-                  SimpleIcons.figma,
-                  color: Colors.cyan,
-                  size: 18,
-                ),
-                context: context,
-              ),
-              generateClickableLabel(
-                "@chandramasaha",
-                designerLinkedin,
-                const Icon(
-                  SimpleIcons.linkedin,
-                  color: Colors.cyan,
-                  size: 16,
-                ),
-                context: context,
-              ),
-              generateClickableLabel(
-                "Other Links",
-                designerLink,
-                const Icon(
-                  SimpleIcons.chainlink,
-                  color: Colors.cyan,
-                  size: 18,
-                ),
-                context: context,
-              )
-            ],
+          const Text(
+            designerTagLine,
+            style: TextStyle(color: Colors.cyan, fontSize: 14),
           ),
         ],
       ),

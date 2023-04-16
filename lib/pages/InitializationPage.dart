@@ -35,7 +35,6 @@ class _InitializationPageState extends State<InitializationPage> {
   BuildContext? ctxt;
   @override
   void initState() {
-    // TODO: implement initState
     widget.time = calculateOptimalTimeFor(
         cols: widget.grid[0].length, rows: widget.grid.length);
     super.initState();
@@ -110,12 +109,12 @@ class _InitializationPageState extends State<InitializationPage> {
                     "Set custom growth rate",
                     style: GoogleFonts.sourceCodePro(color: Colors.white),
                   )),
-              PopupMenuItem(
-                  value: 2,
-                  child: Text(
-                    "Change Color scheme",
-                    style: GoogleFonts.sourceCodePro(color: Colors.white),
-                  )),
+              // PopupMenuItem(
+              //     value: 2,
+              //     child: Text(
+              //       "Change Color scheme",
+              //       style: GoogleFonts.sourceCodePro(color: Colors.white),
+              //     )),
               PopupMenuItem(
                   value: 4,
                   child: Text(
@@ -165,12 +164,12 @@ class _InitializationPageState extends State<InitializationPage> {
                 );
               }
               break;
-            case 2:
-              {
-                DialogManager.openInfoDialog(
-                    details: "Not implemented yet!", context: context);
-              }
-              break;
+            // case 2:
+            //   {
+            //     DialogManager.openInfoDialog(
+            //         details: "Not implemented yet!", context: context);
+            //   }
+            //   break;
             case 3:
               {
                 Phoenix.rebirth(context);

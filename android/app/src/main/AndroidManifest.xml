@@ -2,7 +2,7 @@
     package="com.example.flutter_automata">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="Game of Life"
+        android:label="GameOfLife"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -38,9 +38,28 @@ If a cell is alive and has two or three live neighbors, it remains alive.
 If a cell is dead and has exactly three live neighbors, it comes to life.
 In all other cases, a cell dies or remains dead.
 These simple rules can generate patterns ranging from simple oscillators to complex shapes that evolve over time. The Game of Life is often used as an example of cellular automata and is widely studied by mathematicians, computer scientists, and other researchers interested in complex systems and emergent behavior.
+Thus, for Connway's Game of Life, the state transition diagram would be as follows:
+Ruleset-
+- Adjacent live cells <2, Cell death```(a)```
+- Adjacent live cells>3, Cell death```(b)```
+- Exactly 3 cells live in adjacent cells, dead cell comes back to life```(c)```
+```
+Symbols={a,b,c} 
+States={Alive, Dead}
+Initial State=Alive
+Accepted State(s)={Alive}
+```
+
+<br>
+
+<img width="355" alt="Finite automaton diagram" src="https://github.com/nikhil-RGB/flutter_automata/assets/68727041/7b5b1676-5a10-4b51-9728-a5ad6e506e5e">
+
+<br>
+<br>
+
 
 > **Note**
-> ### This project is continually being developed, and may have multiple bugs/issues and janky performance under certain conditions. The performance of the app will      undergo heavy optimization in the coming releases!
+> ### This project is under intermittent development, and may have janky performance under certain conditions(generally very large grids >55 * 55). I will attempt to improve this performance in future releases.
 
 ### Experimental Feature- Symmetric Encryption Key/IV generation:
 

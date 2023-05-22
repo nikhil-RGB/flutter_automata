@@ -94,3 +94,7 @@ Here are the specefic implementation details for this experimental feature:
 <img width="230" alt="screen3" align="right" src="https://user-images.githubusercontent.com/68727041/229349879-c0cfc8ec-18fe-48ef-8b52-56e3cb5835c7.jpeg">
 </div>
 
+### Other Platforms:
+
+This app has also been deployed on Google Playstore, and you can download it on android devices from there by [clicking here](https://play.google.com/store/apps/details?id=com.swingguiking)
+Hope you found my work interesting! 👍
